@@ -1,0 +1,43 @@
+<ion-breadcrumbs>
+  <ion-breadcrumb href="#home">Home</ion-breadcrumb>
+  <ion-breadcrumb href="#PersonalData">PersonalData</ion-breadcrumb>
+</ion-breadcrumbs>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>PersonalData</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+  <ion-list [inset]="true">
+
+    <ion-segment value="buttons">
+      <ion-segment-button value="male">
+        <ion-label>Male</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="femmale">
+        <ion-label>Female</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="nonBinary">
+        <ion-label>Non-Binary</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <ion-item color="light">
+      <ion-label>Weight:</ion-label>
+      <ion-input placeholder="lb"></ion-input>
+    </ion-item>
+  
+    <ion-item color="light">
+      <ion-label>Age:</ion-label>
+      <ion-input placeholder="Ex: 22"></ion-input>
+    </ion-item>
+  
+    <ion-item color="light">
+      <ion-label>Height:</ion-label>
+      <ion-input placeholder="Ex: cm"></ion-input>
+    </ion-item>
+    
+  </ion-list>
+</ion-content>
