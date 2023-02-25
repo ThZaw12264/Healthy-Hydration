@@ -9,19 +9,30 @@ import { HealthKit, HealthKitOptions } from '@ionic-native/health-kit/ngx/index'
 })
 
 export class PersonalDataPage implements OnInit {
-  usrHeight = 0;
-  usrWeight = 0;
-  usrAge = 0;
-  usrGender = 'No Data';
+  //default info for the average human
+  usrHeight = 65;
+  usrWeight = 135;
+  usrAge = 25;
+  usrGender = 'male';
   //queue of data from past 4 weeks
-  usrMonthlyData = []     
+  usrMonthlyData = Array();     
 
   constructor(private healthKit: HealthKit, private plt: Platform) {
     this.plt.ready().then(() => {
       this.healthKit.available().then(available => {
         if (available) {
           var options: HealthKitOptions = {
-            readTypes: ['HKQuantityTypeIdentifierHeight', 'HKQuantityTypeIdentifierStepCount', 'HKWorkoutTypeIdentifier', 'HKQuantityTypeIdentifierActiveEnergyBurned'],
+            readTypes: [
+              'HKQuantityTypeIdentifierStepCount',
+              'HKQuantityTypeIdentifierDistanceWalkingRunning',
+              'HKQuantityTypeIdentifierActiveEnergyBurned',
+              'HKQuantityTypeIdentifierAppleExerciseTime',
+              'HKQuantityTypeIdentifierAppleMoveTime',
+              'HKQuantityTypeIdentifierAppleStandTime',
+              'HKQuantityTypeIdentifierHeartRate',
+              'HKQuantityTypeIdentifierRestingHeartRate',
+              'HKCategoryTypeIdentifierSleepAnalysis'
+            ],
           }
           this.healthKit.requestAuthorization(options).then(_ => {
             //this.loadHealthData();
@@ -33,6 +44,9 @@ export class PersonalDataPage implements OnInit {
 
   ngOnInit() { }
 
+  saveGenderMale() { this.usrGender = 'male' }
+  saveGenderFemale() { this.usrGender = 'female' }
+
   savePersonalInfo() {
     // this.healthKit.saveHeight({ unit: 'cm', amount: this.usrHeight }).then(_ => {
     //   this.loadHealthData();
@@ -41,44 +55,59 @@ export class PersonalDataPage implements OnInit {
   }
 
   loadYesterdayData() {
-    // 'usrSleepTime' = ;
-    // 'usrSteps' = [];
-    // 'usr'
+    var steps = Array();
+    var energyBurned = Array();
+
+    for (let hour = 24; hour > 0; --hour) {
+      let sd = new Date(new Date().getTime() - hour * 60 * 60 * 1000);
+      let ed = new Date(new Date().getTime() - (hour - 1) * 60 * 60 * 1000);
+
+      var stepOptions = {
+        startDate: sd,
+        endDate: ed,
+        sampleType: 'HKQuantityTypeIdentifierStepCount',
+        unit: 'count'
+      }
+
+      var nrgOptions = {
+        startDate: sd,
+        endDate: ed,
+        sampleType: 'HKQuantityTypeIdentifierActiveEnergyBurned',
+        energyUnit: 'cal'
+      }
+
+      this.healthKit.querySampleType(stepOptions).then(data => {
+        let stepSum = data.reduce((a, b) => a + b.quantity, 0);
+        steps.push(
+          {'hour': 24-hour, 'steps': stepSum}
+        );
+      }, err => {
+        console.log('No steps: ', err);
+      });
+
+      this.healthKit.querySampleType(nrgOptions).then(data => {
+        let nrgSum = data.reduce((a, b) => a + b.quantity, 0);
+        energyBurned.push(
+          {'hour': 24-hour, 'steps': nrgSum}
+        );
+      }, err => {
+        console.log('No energy burned: ', err);
+      });
+    }
+
+    return {
+      "steps": steps,
+      "energyBurned": energyBurned
+    }
   }
 
   cacheYesterdayData() {
-    // let usrYesterdayData = loadYesterdayData();
-
-    // this.usrMonthData.unshift(usrData)
+    let usrYesterdayData = this.loadYesterdayData();
+    if (this.usrMonthlyData.length == 28) {
+      this.usrMonthlyData.pop();
+      this.usrMonthlyData.unshift(usrYesterdayData);
+    } else {
+      this.usrMonthlyData.unshift(usrYesterdayData);
+    }
   }
-
-  // loadHealthData() {
-  //   this.healthKit.readHeight({ unit: 'cm' }).then(val => {
-  //     this.currentHeight = val.value;
-  //   }, err => {
-  //     console.log('No height: ', err);
-  //   });
-
-  //   var stepOptions = {
-  //     startDate: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
-  //     endDate: new Date(),
-  //     sampleType: 'HKQuantityTypeIdentifierStepCount',
-  //     unit: 'count'
-  //   }
-
-  //   this.healthKit.querySampleType(stepOptions).then(data => {
-  //     let stepSum = data.reduce((a, b) => a + b.quantity, 0);
-  //     this.stepcount = stepSum;
-  //   }, err => {
-  //     console.log('No steps: ', err);
-  //   });
-
-  //   this.healthKit.findWorkouts().then(data => {
-  //     this.workouts = data;
-  //   }, err => {
-  //     console.log('no workouts: ', err);
-  //     // Sometimes the result comes in here, very strange.
-  //     this.workouts = err;
-  //   });
-  // }
 }

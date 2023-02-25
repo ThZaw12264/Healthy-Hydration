@@ -26,39 +26,31 @@
   </ion-header>
   <ion-list [inset]="true">
     <ion-segment value="buttons">
-      <ion-segment-button value="male">
+      <ion-segment-button (click)="saveGenderMale()" value="male">
         <ion-label>Male</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="female">
+      <ion-segment-button (click)="saveGenderFemale()" value="female">
         <ion-label>Female</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="nonBinary">
-        <ion-label>Non-Binary</ion-label>
       </ion-segment-button>
     </ion-segment>
 
     <ion-item color="light">
-<<<<<<< HEAD
-      <ion-label>Weight:</ion-label>
-      <ion-input type="number" [(ngModel)]="usrWeight" placeholder="lb"></ion-input>
-=======
-      <ion-label >Weight:</ion-label>
-      <ion-input placeholder="lb"></ion-input>
->>>>>>> ce49bb5cbd49bdb4b9ebf0a7cd351bb0cc0e3010
+      <ion-label>Weight (lb):</ion-label>
+      <ion-input type="number" [(ngModel)]="usrWeight" placeholder="Ex: 135"></ion-input>
     </ion-item>
   
     <ion-item color="light">
-      <ion-label>Age:</ion-label>
-      <ion-input type="number" [(ngModel)]="usrAge" placeholder="years"></ion-input>
+      <ion-label>Age (yrs):</ion-label>
+      <ion-input type="number" [(ngModel)]="usrAge" placeholder="Ex: 25"></ion-input>
     </ion-item>
   
     <ion-item color="light">
-      <ion-label>Height:</ion-label>
-      <ion-input type="number" [(ngModel)]="usrHeight" placeholder="cm"></ion-input>
+      <ion-label>Height (in):</ion-label>
+      <ion-input type="number" [(ngModel)]="usrHeight" placeholder="Ex: 65"></ion-input>
     </ion-item>
+
+    <ion-button full (click)="savePersonalInfo()">Save</ion-button>
     
   </ion-list>
-
-  <ion-button full (click)="savePersonalInfo()">Save</ion-button>
 
 </ion-content>
