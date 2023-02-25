@@ -12,16 +12,19 @@
   <ion-breadcrumb href="menu">Menu</ion-breadcrumb>
   <ion-breadcrumb href="personal-data">PersonalData</ion-breadcrumb>
 </ion-breadcrumbs> -->
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-title>Personal Data</ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content>
-  
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Personal Data</ion-title>
+    </ion-toolbar>
+  </ion-header>
   <ion-list [inset]="true">
-
     <ion-segment value="buttons">
       <ion-segment-button value="male">
         <ion-label>Male</ion-label>
@@ -35,7 +38,7 @@
     </ion-segment>
 
     <ion-item color="light">
-      <ion-label>Weight:</ion-label>
+      <ion-label >Weight:</ion-label>
       <ion-input placeholder="lb"></ion-input>
     </ion-item>
   
