@@ -1,23 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { HealthKit, HealthKitOptions } from '@ionic-native/health-kit/ngx/index';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
-  selector: 'app-personal-data',
-  templateUrl: './personal-data.page.html',
-  styleUrls: ['./personal-data.page.scss'],
+  selector: 'app-profile',
+  templateUrl: './profile.page.html',
+  styleUrls: ['./profile.page.scss'],
 })
 
-export class PersonalDataPage implements OnInit {
-  //default info for the average human
-  usrHeight = 65;
-  usrWeight = 135;
-  usrAge = 25;
-  usrGender = 'male';
+export class ProfilePage implements OnInit {
+  public static usrName: string;
+  public static usrHeight: number;
+  public static usrWeight: number;
+  public static usrAge: number;
+  public static usrGender: string;
   //queue of data from past 4 weeks
   usrMonthlyData = Array();     
 
-  constructor(private healthKit: HealthKit, private plt: Platform) {
+  public classReference = ProfilePage;
+
+  constructor(private healthKit: HealthKit, private plt: Platform, public myapp: AppComponent) {
     this.plt.ready().then(() => {
       this.healthKit.available().then(available => {
         if (available) {
@@ -38,20 +41,28 @@ export class PersonalDataPage implements OnInit {
             //this.loadHealthData();
           })
         }
+      }, err => {
+        console.log('Device is not compatible with IOS HealthKit', err);
       });
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
-  saveGenderMale() { this.usrGender = 'male' }
-  saveGenderFemale() { this.usrGender = 'female' }
+  saveGender(gender: string) { ProfilePage.usrGender = gender }
 
   savePersonalInfo() {
     // this.healthKit.saveHeight({ unit: 'cm', amount: this.usrHeight }).then(_ => {
     //   this.loadHealthData();
     // })
-    console.log(this.usrHeight, this.usrWeight, this.usrAge);
+    this.myapp.storeInfo(
+      ProfilePage.usrName, 
+      ProfilePage.usrGender, 
+      ProfilePage.usrAge, 
+      ProfilePage.usrHeight, 
+      ProfilePage.usrWeight
+    );
+    console.log(ProfilePage.usrName, ProfilePage.usrHeight, ProfilePage.usrWeight, ProfilePage.usrAge, ProfilePage.usrGender);
   }
 
   loadYesterdayData() {

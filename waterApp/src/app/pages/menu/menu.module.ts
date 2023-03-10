@@ -15,8 +15,8 @@ const routes: Routes = [
     component: MenuPage,
     children: [
       {
-        path: 'personal-data',
-        loadChildren: () => import('../personal-data/personal-data.module').then( m => m.PersonalDataPageModule)
+        path: 'menu',
+        loadChildren: () => import('../menu/menu.module').then( m => m.MenuPageModule)
       }
     ]
   },

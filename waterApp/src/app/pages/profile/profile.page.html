@@ -1,0 +1,58 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>personalData</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+</ion-content> -->
+
+<!-- <ion-breadcrumbs>
+  <ion-breadcrumb href="menu">Menu</ion-breadcrumb>
+  <ion-breadcrumb href="personal-data">PersonalData</ion-breadcrumb>
+</ion-breadcrumbs> -->
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>Personal Data</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>{{classReference.usrName}}'s Profile</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-list [inset]="true">
+    <ion-segment value="{{classReference.usrGender}}">
+      <ion-segment-button value="Male" (click)="saveGender('Male')">
+        <ion-label>Male</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Female" (click)="saveGender('Female')">
+        <ion-label>Female</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <ion-item color="light">
+      <ion-label>Age (yrs):</ion-label>
+      <ion-input type="number" [(ngModel)]="classReference.usrAge" placeholder="Ex: 25"></ion-input>
+    </ion-item>
+
+    <ion-item color="light">
+      <ion-label>Weight (lb):</ion-label>
+      <ion-input type="number" [(ngModel)]="classReference.usrWeight" placeholder="Ex: 135"></ion-input>
+    </ion-item>
+  
+    <ion-item color="light">
+      <ion-label>Height (in):</ion-label>
+      <ion-input type="number" [(ngModel)]="classReference.usrHeight" placeholder="Ex: 65"></ion-input>
+    </ion-item>
+
+    <ion-button full (click)="savePersonalInfo()">Save</ion-button> 
+
+    <!-- Use save button to update static members instead of using a classReference; retrieve values from inputs and modify the static members inside the component class with the function -->
+    
+  </ion-list>
+
+</ion-content>

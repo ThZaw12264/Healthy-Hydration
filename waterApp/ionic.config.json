@@ -1,7 +1,8 @@
 {
-  "name": "sleepApp",
+  "name": "waterApp",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

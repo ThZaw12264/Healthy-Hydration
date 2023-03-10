@@ -27,6 +27,7 @@
     "@ionic-native/core": "^5.36.0",
     "@ionic-native/health-kit": "^5.36.0",
     "@ionic/angular": "^6.1.9",
+    "@ionic/storage-angular": "^3.0.6",
     "cap": "^0.2.1",
     "com.telerik.plugins.healthkit": "^0.7.0",
     "install": "^0.13.0",
