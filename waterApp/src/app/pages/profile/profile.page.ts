@@ -16,7 +16,8 @@ export class ProfilePage implements OnInit {
   public static usrAge: number;
   public static usrGender: string;
   //queue of data from past 4 weeks
-  usrMonthlyData = Array();     
+  usrMonthlyData = Array();   
+  usrTodayData = Array();  
 
   public classReference = ProfilePage;
 
@@ -52,9 +53,8 @@ export class ProfilePage implements OnInit {
   saveGender(gender: string) { ProfilePage.usrGender = gender }
 
   savePersonalInfo() {
-    // this.healthKit.saveHeight({ unit: 'cm', amount: this.usrHeight }).then(_ => {
-    //   this.loadHealthData();
-    // })
+    this.healthKit.saveHeight({ unit: 'cm', amount: ProfilePage.usrHeight });
+    this.healthKit.saveWeight({ unit: 'lb', amount: ProfilePage.usrWeight });
     this.myapp.storeInfo(
       ProfilePage.usrName, 
       ProfilePage.usrGender, 
