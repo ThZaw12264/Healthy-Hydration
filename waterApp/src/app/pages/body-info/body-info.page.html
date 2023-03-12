@@ -12,12 +12,12 @@
 
     <ion-item color="light">
         <ion-label position="stacked">What's your name?</ion-label>
-        <ion-input type="string" [(ngModel)]="profile.classReference.usrName"></ion-input>
+        <ion-input type="string" [(ngModel)]="profileReference.usrName"></ion-input>
     </ion-item>
 
     <ion-item>
         <ion-label position="stacked">What's your gender?</ion-label>
-        <ion-select interface="popover" [(ngModel)]="profile.classReference.usrGender" placeholder="Select">
+        <ion-select interface="popover" [(ngModel)]="profileReference.usrGender" placeholder="Select">
             <ion-select-option>Male</ion-select-option>
             <ion-select-option>Female</ion-select-option>
           </ion-select>
@@ -25,16 +25,16 @@
 
     <ion-item color="light">
         <ion-label position="stacked">How old are you?</ion-label>
-        <ion-input type="number" [(ngModel)]="profile.classReference.usrAge" placeholder="..years old"></ion-input>
+        <ion-input type="number" [(ngModel)]="profileReference.usrAge" placeholder="..years old"></ion-input>
     </ion-item>
 
     <ion-item>
         <ion-label position="stacked">How tall are you?</ion-label>
-        <ion-input type="number" [(ngModel)]="profile.classReference.usrHeight" placeholder="..inches"></ion-input>
+        <ion-input type="number" [(ngModel)]="profileReference.usrHeight" placeholder="..inches"></ion-input>
     </ion-item>
 
     <ion-item color="light">
         <ion-label position="stacked">How much do you weigh?</ion-label>
-        <ion-input type="number" [(ngModel)]="profile.classReference.usrWeight" placeholder="..pounds"></ion-input>
+        <ion-input type="number" [(ngModel)]="profileReference.usrWeight" placeholder="..pounds"></ion-input>
     </ion-item>
 </ion-content>

@@ -21,11 +21,11 @@
 <ion-content>
   <ion-header>
     <ion-toolbar>
-      <ion-title>{{classReference.usrName}}'s Profile</ion-title>
+      <ion-title>{{profileReference.usrName}}'s Profile</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-list [inset]="true">
-    <ion-segment value="{{classReference.usrGender}}">
+    <ion-segment value="{{profileReference.usrGender}}">
       <ion-segment-button value="Male" (click)="saveGender('Male')">
         <ion-label>Male</ion-label>
       </ion-segment-button>
@@ -35,23 +35,32 @@
     </ion-segment>
 
     <ion-item color="light">
-      <ion-label>Age (yrs):</ion-label>
-      <ion-input type="number" [(ngModel)]="classReference.usrAge" placeholder="Ex: 25"></ion-input>
+      <ion-label>Name:</ion-label>
+      <ion-input class="ion-text-right" type="string" [(ngModel)]="profileReference.usrName"></ion-input>
     </ion-item>
 
     <ion-item color="light">
-      <ion-label>Weight (lb):</ion-label>
-      <ion-input type="number" [(ngModel)]="classReference.usrWeight" placeholder="Ex: 135"></ion-input>
+      <ion-label>Age (yrs):</ion-label>
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileReference.usrAge" placeholder="..years old"></ion-input>
+    </ion-item>
+
+    <ion-item color="light">
+      <ion-label>Weight (lbs):</ion-label>
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileReference.usrWeight" placeholder="..pounds"></ion-input>
     </ion-item>
   
     <ion-item color="light">
       <ion-label>Height (in):</ion-label>
-      <ion-input type="number" [(ngModel)]="classReference.usrHeight" placeholder="Ex: 65"></ion-input>
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileReference.usrHeight" placeholder="..inches"></ion-input>
     </ion-item>
 
     <ion-button full (click)="savePersonalInfo()">Save</ion-button> 
 
-    <!-- Use save button to update static members instead of using a classReference; retrieve values from inputs and modify the static members inside the component class with the function -->
+    <ion-card>Total Water Drank:</ion-card>
+    <ion-card>Goals Reached:</ion-card>       
+    <!-- Goals reached for each category, sort by most -->
+
+    <!-- Use save button to update static members instead of using a profileReference; retrieve values from inputs and modify the static members inside the component class with the function -->
     
   </ion-list>
 

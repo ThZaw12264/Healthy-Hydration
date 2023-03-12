@@ -4,12 +4,16 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'menu',
+    redirectTo: 'water',
     pathMatch: 'full'
   },
   {
-    path: 'menu',
-    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
+    path: 'water',
+    loadChildren: () => import('./pages/water/water.module').then( m => m.WaterPageModule)
+  },
+  {
+    path: 'goals',
+    loadChildren: () => import('./pages/goals/goals.module').then( m => m.GoalsPageModule)
   },
   {
     path: 'profile',

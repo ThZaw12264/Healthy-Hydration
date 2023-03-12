@@ -19,7 +19,7 @@ export class ProfilePage implements OnInit {
   usrMonthlyData = Array();   
   usrTodayData = Array();  
 
-  public classReference = ProfilePage;
+  public profileReference = ProfilePage;
 
   constructor(private healthKit: HealthKit, private plt: Platform, public myapp: AppComponent) {
     this.plt.ready().then(() => {
@@ -27,6 +27,8 @@ export class ProfilePage implements OnInit {
         if (available) {
           var options: HealthKitOptions = {
             readTypes: [
+              'HKQuantityTypeIdentifierHeight',
+              'HKQuantityTypeIdentifierBodyMass',
               'HKQuantityTypeIdentifierStepCount',
               'HKQuantityTypeIdentifierDistanceWalkingRunning',
               'HKQuantityTypeIdentifierActiveEnergyBurned',
@@ -37,10 +39,12 @@ export class ProfilePage implements OnInit {
               'HKQuantityTypeIdentifierRestingHeartRate',
               'HKCategoryTypeIdentifierSleepAnalysis'
             ],
+            writeTypes: [
+              'HKQuantityTypeIdentifierHeight',
+              'HKQuantityTypeIdentifierBodyMass'
+            ]
           }
-          this.healthKit.requestAuthorization(options).then(_ => {
-            //this.loadHealthData();
-          })
+          this.healthKit.requestAuthorization(options);
         }
       }, err => {
         console.log('Device is not compatible with IOS HealthKit', err);
@@ -53,7 +57,7 @@ export class ProfilePage implements OnInit {
   saveGender(gender: string) { ProfilePage.usrGender = gender }
 
   savePersonalInfo() {
-    this.healthKit.saveHeight({ unit: 'cm', amount: ProfilePage.usrHeight });
+    this.healthKit.saveHeight({ unit: 'in', amount: ProfilePage.usrHeight });
     this.healthKit.saveWeight({ unit: 'lb', amount: ProfilePage.usrWeight });
     this.myapp.storeInfo(
       ProfilePage.usrName, 

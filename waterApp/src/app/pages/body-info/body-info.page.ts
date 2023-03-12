@@ -10,21 +10,15 @@ import { AppComponent } from 'src/app/app.component';
   styleUrls: ['./body-info.page.scss'],
 })
 export class BodyInfoPage implements OnInit {
-  profile: ProfilePage;
+  profileReference = ProfilePage;
 
-  constructor(private modalCtrl: ModalController, pp: ProfilePage, public myapp: AppComponent) {this.profile = pp}
+  constructor(private modalCtrl: ModalController, public profile: ProfilePage, private myapp: AppComponent) {}
 
   ngOnInit() {}
 
   confirm() {
     if (ProfilePage.usrName && ProfilePage.usrGender && ProfilePage.usrAge && ProfilePage.usrHeight && ProfilePage.usrWeight) {
-      this.myapp.storeInfo(
-        ProfilePage.usrName, 
-        ProfilePage.usrGender, 
-        ProfilePage.usrAge, 
-        ProfilePage.usrHeight, 
-        ProfilePage.usrWeight
-      );
+      this.profile.savePersonalInfo();
       this.modalCtrl.dismiss('confirm');
     }
   }
