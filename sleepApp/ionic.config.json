@@ -1,7 +1,0 @@
-{
-  "name": "sleepApp",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
