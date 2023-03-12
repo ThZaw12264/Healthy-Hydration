@@ -10,11 +10,18 @@ import { AppComponent } from 'src/app/app.component';
 })
 
 export class ProfilePage implements OnInit {
-  public static usrName: string;
-  public static usrHeight: number;
-  public static usrWeight: number;
-  public static usrAge: number;
-  public static usrGender: string;
+  //ng variable, not used for calculations
+  public static varName: string;
+  public static varGender: string;
+  public static varAge: number;
+  public static varHeight: number;
+  public static varWeight: number;
+  //saved body data used for calculations
+  public static userName: string;
+  public static userGender: string;
+  public static userAge: number;
+  public static userHeight: number;
+  public static userWeight: number;
   //queue of data from past 4 weeks
   usrMonthlyData = Array();   
   usrTodayData = Array();  
@@ -54,19 +61,23 @@ export class ProfilePage implements OnInit {
 
   ngOnInit() {}
 
-  saveGender(gender: string) { ProfilePage.usrGender = gender }
+  saveGender(gender: string) { ProfilePage.varGender = gender }
 
   savePersonalInfo() {
-    this.healthKit.saveHeight({ unit: 'in', amount: ProfilePage.usrHeight });
-    this.healthKit.saveWeight({ unit: 'lb', amount: ProfilePage.usrWeight });
+    ProfilePage.userName = ProfilePage.varName;
+    ProfilePage.userGender = ProfilePage.varGender;
+    ProfilePage.userAge = ProfilePage.varAge;
+    ProfilePage.userHeight = ProfilePage.varHeight;
+    ProfilePage.userWeight = ProfilePage.varWeight;
+    this.healthKit.saveHeight({ unit: 'in', amount: ProfilePage.userHeight });
+    this.healthKit.saveWeight({ unit: 'lb', amount: ProfilePage.userWeight });
     this.myapp.storeInfo(
-      ProfilePage.usrName, 
-      ProfilePage.usrGender, 
-      ProfilePage.usrAge, 
-      ProfilePage.usrHeight, 
-      ProfilePage.usrWeight
+      ProfilePage.userName, 
+      ProfilePage.userGender, 
+      ProfilePage.userAge, 
+      ProfilePage.userHeight, 
+      ProfilePage.userWeight
     );
-    console.log(ProfilePage.usrName, ProfilePage.usrHeight, ProfilePage.usrWeight, ProfilePage.usrAge, ProfilePage.usrGender);
   }
 
   loadYesterdayData() {

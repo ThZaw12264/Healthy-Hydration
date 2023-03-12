@@ -17,7 +17,7 @@ export class BodyInfoPage implements OnInit {
   ngOnInit() {}
 
   confirm() {
-    if (ProfilePage.usrName && ProfilePage.usrGender && ProfilePage.usrAge && ProfilePage.usrHeight && ProfilePage.usrWeight) {
+    if (ProfilePage.varName && ProfilePage.varGender && ProfilePage.varAge && ProfilePage.varHeight && ProfilePage.varWeight) {
       this.profile.savePersonalInfo();
       this.modalCtrl.dismiss('confirm');
     }

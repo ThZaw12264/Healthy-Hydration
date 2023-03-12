@@ -28,11 +28,17 @@ export class AppComponent {
   }
 
   async getStoredInfo() {
-    ProfilePage.usrName = await this.storage.get('name');
-    ProfilePage.usrGender = await this.storage.get('gender');
-    ProfilePage.usrAge = await this.storage.get('age');
-    ProfilePage.usrHeight = await this.storage.get('height');
-    ProfilePage.usrWeight = await this.storage.get('weight');
+    ProfilePage.varName = await this.storage.get('name');
+    ProfilePage.varGender = await this.storage.get('gender');
+    ProfilePage.varAge = await this.storage.get('age');
+    ProfilePage.varHeight = await this.storage.get('height');
+    ProfilePage.varWeight = await this.storage.get('weight');
+
+    ProfilePage.userName = ProfilePage.varName;
+    ProfilePage.userGender = ProfilePage.varGender;
+    ProfilePage.userAge = ProfilePage.varAge;
+    ProfilePage.userHeight = ProfilePage.varHeight;
+    ProfilePage.userWeight = ProfilePage.varWeight;
   }
 
   async storeInfo(name: string, gender: string, age: number, height: number, weight: number) {
