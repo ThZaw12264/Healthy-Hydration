@@ -15,7 +15,7 @@ export class AppComponent {
 
   async ngOnInit() {
     await this.storage.create();
-    const infoEntered = await this.storage.get('BodyInfoEntered');
+    const infoEntered = await this.storage.get('name');
     const modal = await this.modalCtrl.create({
       component: BodyInfoPage,
     });
@@ -24,7 +24,6 @@ export class AppComponent {
       this.getStoredInfo();
     } else {
       modal.present();
-      await this.storage.set('BodyInfoEntered', 'YES');     //move to after filling out info
     }
   }
 
