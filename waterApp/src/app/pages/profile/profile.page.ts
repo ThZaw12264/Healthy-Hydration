@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { HealthKit, HealthKitOptions } from '@ionic-native/health-kit/ngx/index';
 import { AppComponent } from 'src/app/app.component';
+import { GoalsPage } from '../goals/goals.page';
 
 @Component({
   selector: 'app-profile',
@@ -23,12 +24,15 @@ export class ProfilePage implements OnInit {
   public static userHeight: number;
   public static userWeight: number;
   //queue of data from past 4 weeks
-  usrMonthlyData = Array();   
-  usrTodayData = Array();  
+  userMonthlyData = Array();   
+  userTodayData = Array();
+  public static userStepsData = Array();
+
+  private timer: any;
 
   public profileReference = ProfilePage;
 
-  constructor(private healthKit: HealthKit, private plt: Platform, public myapp: AppComponent) {
+  constructor(private healthKit: HealthKit, private plt: Platform, public goalspage: GoalsPage, public myapp: AppComponent) {
     this.plt.ready().then(() => {
       this.healthKit.available().then(available => {
         if (available) {
@@ -51,7 +55,10 @@ export class ProfilePage implements OnInit {
               'HKQuantityTypeIdentifierBodyMass'
             ]
           }
-          this.healthKit.requestAuthorization(options);
+          this.healthKit.requestAuthorization(options).then(_ => {
+            this.load12HrStepData();
+            this.loadLiveStepData();
+          })
         }
       }, err => {
         console.log('Device is not compatible with IOS HealthKit', err);
@@ -60,6 +67,10 @@ export class ProfilePage implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngOnDestroy() {
+    clearInterval(this.timer);
+  }
 
   saveGender(gender: string) { ProfilePage.varGender = gender }
 
@@ -78,6 +89,61 @@ export class ProfilePage implements OnInit {
       ProfilePage.userHeight, 
       ProfilePage.userWeight
     );
+  }
+
+  load12HrStepData() {
+    for (let halfhour = 24; halfhour > 0; --halfhour) {
+      let sd = new Date(new Date().getTime() - halfhour * 1800 * 1000);
+      let ed = new Date(new Date().getTime() - (halfhour - 1) * 1800 * 1000);
+
+      var stepOptions = {
+        startDate: sd,
+        endDate: ed,
+        sampleType: 'HKQuantityTypeIdentifierStepCount',
+        unit: 'count'
+      }
+
+      this.healthKit.querySampleType(stepOptions).then(data => {
+        let stepSum = data.reduce((a, b) => a + b.quantity, 0);
+        ProfilePage.userStepsData.push(
+          {'time': new Date((sd.getTime() + ed.getTime()) / 2), 'steps': stepSum}
+        );
+      }, err => {
+        console.log('No steps: ', err);
+      });
+    }
+    console.log(ProfilePage.userStepsData);
+  }
+
+  loadLiveStepData() {
+    this.timer = setInterval(() => {
+      let sd = new Date(new Date().getTime() - 1800 * 1000);
+      let ed = new Date();
+
+      var stepOptions = {
+        startDate: sd,
+        endDate: ed,
+        sampleType: 'HKQuantityTypeIdentifierStepCount',
+        unit: 'count'
+      }
+
+      this.healthKit.querySampleType(stepOptions).then(data => {
+        let stepSum = data.reduce((a, b) => a + b.quantity, 0);
+        let date = new Date((sd.getTime() + ed.getTime()) / 2);
+
+        ProfilePage.userStepsData.shift()
+        ProfilePage.userStepsData.push({
+          name: date.toString(),
+          value: [
+            [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('/') + 'T' + [date.getHours(), date.getMinutes()].join(':'),
+            Math.round(stepSum)
+          ]
+        });
+        this.goalspage.updateGraph();
+      }, err => {
+        console.log('No steps: ', err);
+      });
+    }, 60000 * 30);
   }
 
   loadYesterdayData() {
@@ -128,12 +194,12 @@ export class ProfilePage implements OnInit {
   }
 
   cacheYesterdayData() {
-    let usrYesterdayData = this.loadYesterdayData();
-    if (this.usrMonthlyData.length == 28) {
-      this.usrMonthlyData.pop();
-      this.usrMonthlyData.unshift(usrYesterdayData);
+    let userYesterdayData = this.loadYesterdayData();
+    if (this.userMonthlyData.length == 28) {
+      this.userMonthlyData.pop();
+      this.userMonthlyData.unshift(userYesterdayData);
     } else {
-      this.usrMonthlyData.unshift(usrYesterdayData);
+      this.userMonthlyData.unshift(userYesterdayData);
     }
   }
 }

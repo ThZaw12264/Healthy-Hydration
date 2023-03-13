@@ -9,12 +9,15 @@ import { GoalsPageRoutingModule } from './goals-routing.module';
 
 import { GoalsPage } from './goals.page';
 
+import { NgxEchartsModule } from 'ngx-echarts';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    GoalsPageRoutingModule
+    GoalsPageRoutingModule,
+    NgxEchartsModule.forChild()
   ],
   declarations: [GoalsPage]
 })
