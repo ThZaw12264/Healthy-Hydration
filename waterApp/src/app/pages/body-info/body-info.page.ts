@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ProfilePage } from '../profile/profile.page';
 import { ModalController } from '@ionic/angular';
-import { AppComponent } from 'src/app/app.component';
+import { ProfilePage } from '../profile/profile.page';
+import { ProfileData } from '../profile/profile.data';
 
 @Component({
   selector: 'app-body-info',
@@ -10,15 +10,15 @@ import { AppComponent } from 'src/app/app.component';
   styleUrls: ['./body-info.page.scss'],
 })
 export class BodyInfoPage implements OnInit {
-  profileReference = ProfilePage;
+  profileDataReference = ProfileData;
 
-  constructor(private modalCtrl: ModalController, public profile: ProfilePage, private myapp: AppComponent) {}
+  constructor(private modalCtrl: ModalController, public profilepage: ProfilePage) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   confirm() {
-    if (ProfilePage.varName && ProfilePage.varGender && ProfilePage.varAge && ProfilePage.varHeight && ProfilePage.varWeight) {
-      this.profile.savePersonalInfo();
+    if (ProfileData.varName && ProfileData.varGender && ProfileData.varAge && ProfileData.varHeight && ProfileData.varWeight) {
+      this.profilepage.savePersonalInfo();
       this.modalCtrl.dismiss('confirm');
     }
   }

@@ -2,7 +2,7 @@
     <ion-toolbar>
         <ion-title>Enter Your Info</ion-title>
         <ion-buttons slot="end">
-        <ion-button (click)="confirm()">Save</ion-button>
+            <ion-button (click)="confirm()">Save</ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
@@ -12,29 +12,29 @@
 
     <ion-item color="light">
         <ion-label position="stacked">What's your name?</ion-label>
-        <ion-input type="string" [(ngModel)]="profileReference.varName"></ion-input>
+        <ion-input type="string" [(ngModel)]="profileDataReference.varName"></ion-input>
     </ion-item>
 
     <ion-item>
         <ion-label position="stacked">What's your gender?</ion-label>
-        <ion-select interface="popover" [(ngModel)]="profileReference.varGender" placeholder="Select">
+        <ion-select interface="popover" [(ngModel)]="profileDataReference.varGender" placeholder="Select">
             <ion-select-option>Male</ion-select-option>
             <ion-select-option>Female</ion-select-option>
-          </ion-select>
+        </ion-select>
     </ion-item>
 
     <ion-item color="light">
         <ion-label position="stacked">How old are you?</ion-label>
-        <ion-input type="number" [(ngModel)]="profileReference.varAge" placeholder="..years old"></ion-input>
+        <ion-input type="number" [(ngModel)]="profileDataReference.varAge" placeholder="..years old"></ion-input>
     </ion-item>
 
     <ion-item>
         <ion-label position="stacked">How tall are you?</ion-label>
-        <ion-input type="number" [(ngModel)]="profileReference.varHeight" placeholder="..inches"></ion-input>
+        <ion-input type="number" [(ngModel)]="profileDataReference.varHeight" placeholder="..inches"></ion-input>
     </ion-item>
 
     <ion-item color="light">
         <ion-label position="stacked">How much do you weigh?</ion-label>
-        <ion-input type="number" [(ngModel)]="profileReference.varWeight" placeholder="..pounds"></ion-input>
+        <ion-input type="number" [(ngModel)]="profileDataReference.varWeight" placeholder="..pounds"></ion-input>
     </ion-item>
 </ion-content>

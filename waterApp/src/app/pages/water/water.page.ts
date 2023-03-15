@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfilePage } from '../profile/profile.page';
+import { ProfileData } from '../profile/profile.data';
 
 @Component({
   selector: 'app-water',
@@ -7,9 +7,9 @@ import { ProfilePage } from '../profile/profile.page';
   styleUrls: ['./water.page.scss'],
 })
 export class WaterPage implements OnInit {
-  profileReference = ProfilePage;
-  
-  constructor() {}
+  public profileDataReference = ProfileData;
 
-  ngOnInit() {}
+  constructor() { }
+
+  ngOnInit() { }
 }

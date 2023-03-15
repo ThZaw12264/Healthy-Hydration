@@ -21,11 +21,11 @@
 <ion-content>
   <ion-header>
     <ion-toolbar>
-      <ion-title>{{profileReference.userName}}'s Profile</ion-title>
+      <ion-title>{{profileDataReference.userName}}'s Profile</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-list [inset]="true">
-    <ion-segment value="{{profileReference.varGender}}">
+    <ion-segment value="{{profileDataReference.varGender}}">
       <ion-segment-button value="Male" (click)="saveGender('Male')">
         <ion-label>Male</ion-label>
       </ion-segment-button>
@@ -36,32 +36,35 @@
 
     <ion-item color="light">
       <ion-label>Name:</ion-label>
-      <ion-input class="ion-text-right" type="string" [(ngModel)]="profileReference.varName"></ion-input>
+      <ion-input class="ion-text-right" type="string" [(ngModel)]="profileDataReference.varName"></ion-input>
     </ion-item>
 
     <ion-item color="light">
       <ion-label>Age (yrs):</ion-label>
-      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileReference.varAge" placeholder="..years old"></ion-input>
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileDataReference.varAge"
+        placeholder="..years old"></ion-input>
+    </ion-item>
+
+    <ion-item color="light">
+      <ion-label>Height (in):</ion-label>
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileDataReference.varHeight"
+        placeholder="..inches"></ion-input>
     </ion-item>
 
     <ion-item color="light">
       <ion-label>Weight (lbs):</ion-label>
-      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileReference.varWeight" placeholder="..pounds"></ion-input>
-    </ion-item>
-  
-    <ion-item color="light">
-      <ion-label>Height (in):</ion-label>
-      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileReference.varHeight" placeholder="..inches"></ion-input>
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileDataReference.varWeight"
+        placeholder="..pounds"></ion-input>
     </ion-item>
 
-    <ion-button full (click)="savePersonalInfo()">Save</ion-button> 
+    <ion-button full (click)="savePersonalInfo()">Save</ion-button>
 
     <ion-card>Total Water Drank:</ion-card>
-    <ion-card>Goals Reached:</ion-card>       
+    <ion-card>Goals Reached:</ion-card>
     <!-- Goals reached for each category, sort by most -->
 
     <!-- Use save button to update static members instead of using a profileReference; retrieve values from inputs and modify the static members inside the component class with the function -->
-    
+
   </ion-list>
 
 </ion-content>
