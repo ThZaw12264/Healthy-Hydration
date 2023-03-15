@@ -18,67 +18,69 @@ export class GoalsPage implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     // initialize chart options:
-    this.options = {
-      title: {
-        text: 'Your Steps'
-      },
-      tooltip: {
-        trigger: 'axis',
-        formatter: (params) => {
-          params = params[0];
-          const date = new Date(params.name);
-          let label;
-          if (date.getHours() == 0) {
-            label = date.getHours() + 12 + ":0" + date.getMinutes() + " AM" + ': ' + params.value[1];
-          } else if (date.getHours() == 12) {
-            label = date.getHours() + ":0" + date.getMinutes() + " PM" + ': ' + params.value[1];
-          } else if (date.getHours() < 12) {
-            label = date.getHours() + ":0" + date.getMinutes() + " AM" + ': ' + params.value[1];
-          } else {
-            label = date.getHours() - 12 + ":0" + date.getMinutes() + " PM" + ': ' + params.value[1];
-          }
-          return label;
+    setTimeout(() => {
+      this.options = {
+        title: {
+          text: 'Your Steps'
         },
-        axisPointer: {
-          animation: false
-        }
-      },
-      xAxis: {
-        type: 'time',
-        axisLabel: {
-          formatter: function (value) {
-            const date = new Date(value);
+        tooltip: {
+          trigger: 'axis',
+          formatter: (params) => {
+            params = params[0];
+            const date = new Date(params.name);
             let label;
             if (date.getHours() == 0) {
-              label = date.getHours() + 12 + ":0" + date.getMinutes() + " AM";
+              label = date.getHours() + 12 + ":0" + date.getMinutes() + " AM" + ': ' + params.value[1];
             } else if (date.getHours() == 12) {
-              label = date.getHours() + ":0" + date.getMinutes() + " PM";
+              label = date.getHours() + ":0" + date.getMinutes() + " PM" + ': ' + params.value[1];
             } else if (date.getHours() < 12) {
-              label = date.getHours() + ":0" + date.getMinutes() + " AM";
+              label = date.getHours() + ":0" + date.getMinutes() + " AM" + ': ' + params.value[1];
             } else {
-              label = date.getHours() - 12 + ":0" + date.getMinutes() + " PM";
+              label = date.getHours() - 12 + ":0" + date.getMinutes() + " PM" + ': ' + params.value[1];
             }
             return label;
+          },
+          axisPointer: {
+            animation: false
           }
         },
-        splitLine: {
-          show: false
-        }
-      },
-      yAxis: {
-        type: 'value',
-        boundaryGap: [0, '100%'],
-      },
-      series: [{
-        name: 'Steps Data',
-        type: 'bar',
-        showSymbol: false,
-        emphasis: {
-          line: false,
+        xAxis: {
+          type: 'time',
+          axisLabel: {
+            formatter: function (value) {
+              const date = new Date(value);
+              let label;
+              if (date.getHours() == 0) {
+                label = date.getHours() + 12 + ":0" + date.getMinutes() + " AM";
+              } else if (date.getHours() == 12) {
+                label = date.getHours() + ":0" + date.getMinutes() + " PM";
+              } else if (date.getHours() < 12) {
+                label = date.getHours() + ":0" + date.getMinutes() + " AM";
+              } else {
+                label = date.getHours() - 12 + ":0" + date.getMinutes() + " PM";
+              }
+              return label;
+            }
+          },
+          splitLine: {
+            show: false
+          }
         },
-        data: ProfileData.userStepsData
-      }]
-    };
+        yAxis: {
+          type: 'value',
+          boundaryGap: [0, '100%'],
+        },
+        series: [{
+          name: 'Steps Data',
+          type: 'bar',
+          showSymbol: false,
+          emphasis: {
+            line: false,
+          },
+          data: ProfileData.userStepsData
+        }]
+      };
+    }, 1000)
   }
 
   ngOnDestroy() {
