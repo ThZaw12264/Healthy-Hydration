@@ -46,23 +46,23 @@ export class ProfileData {
             let stepSum = data.reduce((a, b) => a + b.quantity, 0);
             let date = new Date((sd.getTime() + ed.getTime()) / 2);
 
-            return {
+            ProfileData.userStepsData.push({
                 name: date.toString(),
                 value: [
                     [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('/') + 'T' + [date.getHours(), date.getMinutes()].join(':'),
                     Math.round(stepSum)
                 ]
-            };
+            });
         }, err => {
             console.log('No steps: ', err);
         });
     }
 
-    public static load12HrStepData() {
+    public static load6HrStepData() {
         for (let halfhour = 12; halfhour > 0; --halfhour) {
             let sd = new Date(new Date().getTime() - halfhour * 1800 * 1000);
             let ed = new Date(new Date().getTime() - (halfhour - 1) * 1800 * 1000);
-            ProfileData.userStepsData.push(ProfileData.queryStepCount(sd, ed));
+            ProfileData.queryStepCount(sd,ed);
         }
     }
 
@@ -71,8 +71,8 @@ export class ProfileData {
             let sd = new Date(new Date().getTime() - 1800 * 1000);
             let ed = new Date();
             ProfileData.userStepsData.shift();
-            ProfileData.userStepsData.push(ProfileData.queryStepCount(sd, ed));
+            ProfileData.queryStepCount(sd, ed);
             GoalsPage.updateGraph();
-        }, 60000 * 30);
+        }, 60000);
     }
 }

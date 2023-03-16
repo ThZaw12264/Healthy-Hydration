@@ -23,29 +23,33 @@ export class AppComponent implements OnInit {
     this.plt.ready().then(() => {
       ProfileData.healthKit.available().then(available => {
         if (available) {
-          var options: HealthKitOptions = {
-            readTypes: [
-              'HKQuantityTypeIdentifierHeight',
-              'HKQuantityTypeIdentifierBodyMass',
-              'HKQuantityTypeIdentifierStepCount',
-              'HKQuantityTypeIdentifierDistanceWalkingRunning',
-              'HKQuantityTypeIdentifierActiveEnergyBurned',
-              'HKQuantityTypeIdentifierAppleExerciseTime',
-              'HKQuantityTypeIdentifierAppleMoveTime',
-              'HKQuantityTypeIdentifierAppleStandTime',
-              'HKQuantityTypeIdentifierHeartRate',
-              'HKQuantityTypeIdentifierRestingHeartRate',
-              'HKCategoryTypeIdentifierSleepAnalysis'
-            ],
-            writeTypes: [
-              'HKQuantityTypeIdentifierHeight',
-              'HKQuantityTypeIdentifierBodyMass'
-            ]
-          }
-          ProfileData.healthKit.requestAuthorization(options).then(_ => {
-            ProfileData.load12HrStepData();
-            ProfileData.loadLiveStepData();
+          this.notAuthorized().then(() => {
+            var options: HealthKitOptions = {
+              readTypes: [
+                'HKQuantityTypeIdentifierHeight',
+                'HKQuantityTypeIdentifierBodyMass',
+                'HKQuantityTypeIdentifierStepCount',
+                'HKQuantityTypeIdentifierDistanceWalkingRunning',
+                'HKQuantityTypeIdentifierActiveEnergyBurned',
+                'HKQuantityTypeIdentifierAppleExerciseTime',
+                'HKQuantityTypeIdentifierAppleMoveTime',
+                'HKQuantityTypeIdentifierAppleStandTime',
+                'HKQuantityTypeIdentifierHeartRate',
+                'HKQuantityTypeIdentifierRestingHeartRate',
+                'HKCategoryTypeIdentifierSleepAnalysis'
+              ],
+              writeTypes: [
+                'HKQuantityTypeIdentifierHeight',
+                'HKQuantityTypeIdentifierBodyMass'
+              ]
+            }
+
+            ProfileData.healthKit.requestAuthorization(options).then(_ => {
+              this.setAuthorized();
+            });
           });
+          ProfileData.load6HrStepData();
+          ProfileData.loadLiveStepData();
         }
       }, err => {
         console.log('Device is not compatible with IOS HealthKit', err);
@@ -63,6 +67,14 @@ export class AppComponent implements OnInit {
     } else {
       modal.present();
     }
+  }
+
+  async notAuthorized() {
+    return !(await this.storage.get('authorized'));
+  }
+
+  async setAuthorized() {
+    await this.storage.set('authorized', true);
   }
 
   async getStoredBodyInfo() {
