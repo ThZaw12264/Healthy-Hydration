@@ -10,14 +10,12 @@ import { ProfileData } from '../profile/profile.data';
   styleUrls: ['./body-info.page.scss'],
 })
 export class BodyInfoPage implements OnInit {
-  profileDataReference = ProfileData;
-
-  constructor(private modalCtrl: ModalController, public profilepage: ProfilePage) { }
+  constructor(private modalCtrl: ModalController, public profilepage: ProfilePage, public profiledata: ProfileData) { }
 
   ngOnInit() { }
 
   confirm() {
-    if (ProfileData.varName && ProfileData.varGender && ProfileData.varAge && ProfileData.varHeight && ProfileData.varWeight) {
+    if (this.profiledata.varName && this.profiledata.varGender && this.profiledata.varAge && this.profiledata.varHeight && this.profiledata.varWeight) {
       this.profilepage.savePersonalInfo();
       this.modalCtrl.dismiss('confirm');
     }

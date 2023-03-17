@@ -2,31 +2,28 @@ import { Component, OnInit } from '@angular/core';
 
 import { AppComponent } from 'src/app/app.component';
 import { ProfileData } from './profile.data';
-import { GoalsPage } from '../goals/goals.page';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
-  styleUrls: ['./profile.page.scss']
+  styleUrls: ['./profile.page.scss'],
 })
 
 export class ProfilePage implements OnInit {
-  public profileDataReference = ProfileData;
-
-  constructor(private myapp: AppComponent, private goalspage: GoalsPage) { }
+  constructor(private myapp: AppComponent, public profiledata: ProfileData) { }
 
   ngOnInit() { }
 
-  saveGender(gender: string) { ProfileData.varGender = gender }
+  saveGender(gender: string) { this.profiledata.varGender = gender }
 
   savePersonalInfo() {
-    ProfileData.changeUserInfo();
+    this.profiledata.changeUserInfo();
     this.myapp.storeBodyInfo(
-      ProfileData.userName,
-      ProfileData.userGender,
-      ProfileData.userAge,
-      ProfileData.userHeight,
-      ProfileData.userWeight
+      this.profiledata.userName,
+      this.profiledata.userGender,
+      this.profiledata.userAge,
+      this.profiledata.userHeight,
+      this.profiledata.userWeight
     );
   }
 

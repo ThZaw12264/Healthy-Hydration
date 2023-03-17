@@ -8,12 +8,9 @@ import { ProfileData } from '../profile/profile.data';;
 })
 export class GoalsPage implements OnInit, OnDestroy {
   options: any;
-  //shouldn't be static
-  public static updateOptions: any;
+  updateOptions: any;
 
-  public goalsPageReference = GoalsPage;
-
-  constructor() { }
+  constructor(private profiledata: ProfileData) { }
 
   ngOnInit(): void {
 
@@ -30,13 +27,13 @@ export class GoalsPage implements OnInit, OnDestroy {
             const date = new Date(params.name);
             let label;
             if (date.getHours() == 0) {
-              label = date.getHours() + 12 + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes() + " AM" + ' : ' + params.value[1];
+              label = date.getHours() + 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " AM" + ' : ' + params.value[1];
             } else if (date.getHours() == 12) {
-              label = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes() + " PM" + ' : ' + params.value[1];
+              label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " PM" + ' : ' + params.value[1];
             } else if (date.getHours() < 12) {
-              label = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes() + " AM" + ' : ' + params.value[1];
+              label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " AM" + ' : ' + params.value[1];
             } else {
-              label = date.getHours() - 12 + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes() + " PM" + ' : ' + params.value[1];
+              label = date.getHours() - 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " PM" + ' : ' + params.value[1];
             }
             return label;
           },
@@ -51,13 +48,13 @@ export class GoalsPage implements OnInit, OnDestroy {
               const date = new Date(value);
               let label;
               if (date.getHours() == 0) {
-                label = date.getHours() + 12 + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes() + " AM";
+                label = date.getHours() + 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " AM";
               } else if (date.getHours() == 12) {
-                label = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes() + " PM";
+                label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " PM";
               } else if (date.getHours() < 12) {
-                label = date.getHours() + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes() + " AM";
+                label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " AM";
               } else {
-                label = date.getHours() - 12 + ":" + (date.getMinutes()<10?'0':'') + date.getMinutes() + " PM";
+                label = date.getHours() - 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " PM";
               }
               return label;
             }
@@ -77,20 +74,20 @@ export class GoalsPage implements OnInit, OnDestroy {
           emphasis: {
             line: false,
           },
-          data: ProfileData.userStepsData
+          data: this.profiledata.userStepsData
         }]
       };
     }, 1000)
   }
 
   ngOnDestroy() {
-    clearInterval(ProfileData.timer);
+    clearInterval(this.profiledata.timer);
   }
 
-  public static updateGraph() {
-    GoalsPage.updateOptions = {
+  updateGraph() {
+    this.updateOptions = {
       series: [{
-        data: ProfileData.userStepsData
+        data: this.profiledata.userStepsData
       }]
     };
   }

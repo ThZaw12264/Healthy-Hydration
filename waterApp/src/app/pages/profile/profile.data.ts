@@ -1,40 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HealthKit } from '@ionic-native/health-kit/ngx';
-import { GoalsPage } from '../goals/goals.page';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ProfileData {
-    public static healthKit: HealthKit
+    public healthKit!: HealthKit
     //ng variable, not used for calculations
-    public static varName: string;
-    public static varGender: string;
-    public static varAge: number;
-    public static varHeight: number;
-    public static varWeight: number;
+    public varName!: string;
+    public varGender!: string;
+    public varAge!: number;
+    public varHeight!: number;
+    public varWeight!: number;
     //saved body data used for calculations
-    public static userName: string;
-    public static userGender: string;
-    public static userAge: number;
-    public static userHeight: number;
-    public static userWeight: number;
+    public userName!: string;
+    public userGender!: string;
+    public userAge!: number;
+    public userHeight!: number;
+    public userWeight!: number;
 
     //step count for past 6 hours
-    public static userStepsData: any = [];
-    public static timer: any
+    public userStepsData: any = [];
+    public timer: any;
 
-    public static changeUserInfo() {
-        ProfileData.userName = ProfileData.varName;
-        ProfileData.userGender = ProfileData.varGender;
-        ProfileData.userAge = ProfileData.varAge;
-        ProfileData.userHeight = ProfileData.varHeight;
-        ProfileData.userWeight = ProfileData.varWeight;
-        ProfileData.healthKit.saveHeight({ unit: 'in', amount: ProfileData.userHeight });
-        ProfileData.healthKit.saveWeight({ unit: 'lb', amount: ProfileData.userWeight });
+    changeUserInfo() {
+        this.userName = this.varName;
+        this.userGender = this.varGender;
+        this.userAge = this.varAge;
+        this.userHeight = this.varHeight;
+        this.userWeight = this.varWeight;
+        this.healthKit.saveHeight({ unit: 'in', amount: this.userHeight });
+        this.healthKit.saveWeight({ unit: 'lb', amount: this.userWeight });
     }
 
-    public static queryStepCount(sd: Date, ed: Date) {
+    queryStepCount(sd: Date, ed: Date) {
         var stepOptions = {
             startDate: sd,
             endDate: ed,
@@ -42,14 +41,13 @@ export class ProfileData {
             unit: 'count'
         }
 
-        ProfileData.healthKit.querySampleType(stepOptions).then(data => {
+        this.healthKit.querySampleType(stepOptions).then(data => {
             let stepSum = data.reduce((a, b) => a + b.quantity, 0);
-            let date = new Date((sd.getTime() + ed.getTime()) / 2);
 
-            ProfileData.userStepsData.push({
-                name: date.toString(),
+            this.userStepsData.push({
+                name: sd,
                 value: [
-                    [date.getFullYear(), date.getMonth() + 1, date.getDate()].join('/') + 'T' + [date.getHours(), date.getMinutes()].join(':'),
+                    [sd.getFullYear(), sd.getMonth() + 1, sd.getDate()].join('/') + 'T' + [sd.getHours(), sd.getMinutes()].join(':'),
                     Math.round(stepSum)
                 ]
             });
@@ -58,21 +56,56 @@ export class ProfileData {
         });
     }
 
-    public static load6HrStepData() {
-        for (let halfhour = 12; halfhour > 0; --halfhour) {
-            let sd = new Date(new Date().getTime() - halfhour * 1800 * 1000);
-            let ed = new Date(new Date().getTime() - (halfhour - 1) * 1800 * 1000);
-            ProfileData.queryStepCount(sd,ed);
-        }
+    loadTodayStepData() {
+        
     }
 
-    public static loadLiveStepData() {
-        ProfileData.timer = setInterval(() => {
-            let sd = new Date(new Date().getTime() - 1800 * 1000);
-            let ed = new Date();
-            ProfileData.userStepsData.shift();
-            ProfileData.queryStepCount(sd, ed);
-            GoalsPage.updateGraph();
-        }, 60000);
+    load4HrStepData() {
+        let rounded_date = new Date();
+        rounded_date.setMinutes(Math.floor(rounded_date.getMinutes() / 30) * 30);
+        rounded_date.setSeconds(0);
+        for (let halfhour = 7; halfhour > 0; --halfhour) {
+            let sd = new Date(rounded_date.getTime() - halfhour * 1800 * 1000);
+            //ending date 1 second behind for no overlaps
+            let ed = new Date(rounded_date.getTime() - (halfhour - 1) * 1800 * 1000 - 1000);
+            this.queryStepCount(sd,ed);
+        }
+        this.queryStepCount(rounded_date,new Date());
+    }
+
+    loadLiveStepData() {
+        //updates every minute
+        let sd = new Date(new Date().getTime() - 60000);
+        //ending date 1 second behind for no overlaps
+        let ed = new Date(new Date().getTime() - 1000);
+
+        var stepOptions = {
+            startDate: sd,
+            endDate: ed,
+            sampleType: 'HKQuantityTypeIdentifierStepCount',
+            unit: 'count'
+        }
+
+        this.healthKit.querySampleType(stepOptions).then(data => {
+            let stepSum = data.reduce((a, b) => a + b.quantity, 0);
+            let lastStepElement = this.userStepsData[this.userStepsData.length - 1];
+
+            if (sd.getMinutes() < lastStepElement.name.getMinutes() || sd.getMinutes() >= lastStepElement.name.getMinutes() + 30) {
+                let rounded_date = sd;
+                rounded_date.setMinutes(Math.floor(rounded_date.getMinutes() / 30) * 30);
+                rounded_date.setSeconds(0);
+                this.userStepsData.push({
+                    name: rounded_date,
+                    value: [
+                        [rounded_date.getFullYear(), rounded_date.getMonth() + 1, rounded_date.getDate()].join('/') + 'T' + [rounded_date.getHours(), rounded_date.getMinutes()].join(':'),
+                        Math.round(stepSum)
+                    ]
+                });
+            } else {
+                this.userStepsData[this.userStepsData.length - 1].value[1] += stepSum;
+            }
+        }, err => {
+            console.log('No steps: ', err);
+        });
     }
 }

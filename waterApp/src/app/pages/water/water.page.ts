@@ -7,9 +7,7 @@ import { ProfileData } from '../profile/profile.data';
   styleUrls: ['./water.page.scss'],
 })
 export class WaterPage implements OnInit {
-  public profileDataReference = ProfileData;
-
-  constructor() { }
+  constructor(public profiledata: ProfileData) { }
 
   ngOnInit() { }
 }

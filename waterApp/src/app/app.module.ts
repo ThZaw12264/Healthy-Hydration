@@ -26,7 +26,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     }),
     AppRoutingModule
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, HealthKit, GoalsPage, ProfilePage, ProfileData, AppComponent],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, HealthKit, ProfileData, ProfilePage, GoalsPage, AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

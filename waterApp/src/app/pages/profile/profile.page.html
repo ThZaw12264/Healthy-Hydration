@@ -21,11 +21,11 @@
 <ion-content>
   <ion-header>
     <ion-toolbar>
-      <ion-title>{{profileDataReference.userName}}'s Profile</ion-title>
+      <ion-title>{{profiledata.userName}}'s Profile</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-list [inset]="true">
-    <ion-segment value="{{profileDataReference.varGender}}">
+    <ion-segment value="{{profiledata.varGender}}">
       <ion-segment-button value="Male" (click)="saveGender('Male')">
         <ion-label>Male</ion-label>
       </ion-segment-button>
@@ -36,24 +36,24 @@
 
     <ion-item color="light">
       <ion-label>Name:</ion-label>
-      <ion-input class="ion-text-right" type="string" [(ngModel)]="profileDataReference.varName"></ion-input>
+      <ion-input class="ion-text-right" type="string" [(ngModel)]="profiledata.varName"></ion-input>
     </ion-item>
 
     <ion-item color="light">
       <ion-label>Age (yrs):</ion-label>
-      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileDataReference.varAge"
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profiledata.varAge"
         placeholder="..years old"></ion-input>
     </ion-item>
 
     <ion-item color="light">
       <ion-label>Height (in):</ion-label>
-      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileDataReference.varHeight"
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profiledata.varHeight"
         placeholder="..inches"></ion-input>
     </ion-item>
 
     <ion-item color="light">
       <ion-label>Weight (lbs):</ion-label>
-      <ion-input class="ion-text-right" type="number" [(ngModel)]="profileDataReference.varWeight"
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profiledata.varWeight"
         placeholder="..pounds"></ion-input>
     </ion-item>
 
