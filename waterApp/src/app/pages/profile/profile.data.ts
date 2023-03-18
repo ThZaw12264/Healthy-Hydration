@@ -12,16 +12,20 @@ export class ProfileData {
     public varAge!: number;
     public varHeight!: number;
     public varWeight!: number;
+    public varStepsGoal!: number;
     //saved body data used for calculations
     public userName!: string;
     public userGender!: string;
     public userAge!: number;
     public userHeight!: number;
     public userWeight!: number;
+    public userStepsGoal!: number;
 
-    //step count for past 6 hours
-    public userStepsData: any = [];
+    //step count for past 4 hours
     public timer: any;
+    public userStepsData: any = [];
+    public userDailyStepsCount: number = 0;
+    public userStepsGoalReached: boolean = false;
 
     changeUserInfo() {
         this.userName = this.varName;
@@ -29,8 +33,7 @@ export class ProfileData {
         this.userAge = this.varAge;
         this.userHeight = this.varHeight;
         this.userWeight = this.varWeight;
-        this.healthKit.saveHeight({ unit: 'in', amount: this.userHeight });
-        this.healthKit.saveWeight({ unit: 'lb', amount: this.userWeight });
+        this.userStepsGoal = this.varStepsGoal;
     }
 
     queryStepCount(sd: Date, ed: Date) {
@@ -57,20 +60,38 @@ export class ProfileData {
     }
 
     loadTodayStepData() {
-        
+        let sd = new Date();
+        sd.setHours(0, 0, 0);
+        let ed = new Date();
+
+        var stepOptions = {
+            startDate: sd,
+            endDate: ed,
+            sampleType: 'HKQuantityTypeIdentifierStepCount',
+            unit: 'count'
+        }
+
+        this.healthKit.querySampleType(stepOptions).then(data => {
+            let stepSum = data.reduce((a, b) => a + b.quantity, 0);
+            this.userDailyStepsCount = stepSum;
+            if (this.userDailyStepsCount >= this.userStepsGoal) { 
+                this.userStepsGoalReached = true;
+            }
+        }, err => {
+            console.log('No steps: ', err);
+        });
     }
 
     load4HrStepData() {
         let rounded_date = new Date();
-        rounded_date.setMinutes(Math.floor(rounded_date.getMinutes() / 30) * 30);
-        rounded_date.setSeconds(0);
+        rounded_date.setMinutes((Math.floor(rounded_date.getMinutes() / 30) * 30), 0);
         for (let halfhour = 7; halfhour > 0; --halfhour) {
             let sd = new Date(rounded_date.getTime() - halfhour * 1800 * 1000);
             //ending date 1 second behind for no overlaps
             let ed = new Date(rounded_date.getTime() - (halfhour - 1) * 1800 * 1000 - 1000);
-            this.queryStepCount(sd,ed);
+            this.queryStepCount(sd, ed);
         }
-        this.queryStepCount(rounded_date,new Date());
+        this.queryStepCount(rounded_date, new Date());
     }
 
     loadLiveStepData() {
@@ -89,11 +110,24 @@ export class ProfileData {
         this.healthKit.querySampleType(stepOptions).then(data => {
             let stepSum = data.reduce((a, b) => a + b.quantity, 0);
             let lastStepElement = this.userStepsData[this.userStepsData.length - 1];
+            //add to userDayStepCount
+            if (sd.getHours() >= lastStepElement.name.getHours()) {
+                this.userDailyStepsCount += stepSum;
+                if (this.userDailyStepsCount >= this.userStepsGoal) { 
+                    this.userStepsGoalReached = true; 
+                }
+            } else {
+                this.userStepsGoalReached = false; 
+                this.userDailyStepsCount = stepSum;
+                if (this.userDailyStepsCount >= this.userStepsGoal) { 
+                    this.userStepsGoalReached = true; 
+                }
+            }
 
+            //add steps to most recent date if within range, otherwise create a new bar
             if (sd.getMinutes() < lastStepElement.name.getMinutes() || sd.getMinutes() >= lastStepElement.name.getMinutes() + 30) {
                 let rounded_date = sd;
-                rounded_date.setMinutes(Math.floor(rounded_date.getMinutes() / 30) * 30);
-                rounded_date.setSeconds(0);
+                rounded_date.setMinutes(Math.floor(rounded_date.getMinutes() / 30) * 30 , 0);
                 this.userStepsData.push({
                     name: rounded_date,
                     value: [

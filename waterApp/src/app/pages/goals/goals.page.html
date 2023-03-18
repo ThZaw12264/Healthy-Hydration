@@ -7,5 +7,17 @@
 <ion-content>
     <ion-list [inset]="true">
         <div echarts [options]="options" [merge]="updateOptions" class="demo-chart"></div>
+
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>
+                    <div id="stepsTitle"></div>
+                </ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                You've hit {{profiledata.userDailyStepsCount}} of {{profiledata.userStepsGoal}} steps today.
+            </ion-card-content>
+        </ion-card>
     </ion-list>
 </ion-content>

@@ -49,6 +49,7 @@ export class AppComponent implements OnInit {
               this.setAuthorized();
             });
           });
+          this.profiledata.loadTodayStepData();
           this.profiledata.load4HrStepData();
           this.profiledata.timer = setInterval(() => {
             this.profiledata.loadLiveStepData();
@@ -87,27 +88,16 @@ export class AppComponent implements OnInit {
     this.profiledata.varAge = await this.storage.get('age');
     this.profiledata.varHeight = await this.storage.get('height');
     this.profiledata.varWeight = await this.storage.get('weight');
-
-    this.profiledata.userName = this.profiledata.varName;
-    this.profiledata.userGender = this.profiledata.varGender;
-    this.profiledata.userAge = this.profiledata.varAge;
-    this.profiledata.userHeight = this.profiledata.varHeight;
-    this.profiledata.userWeight = this.profiledata.varWeight;
+    this.profiledata.varStepsGoal = await this.storage.get('stepsgoal');
+    this.profiledata.changeUserInfo();
   }
 
-  async storeBodyInfo(name: string, gender: string, age: number, height: number, weight: number) {
+  async storeBodyInfo(name: string, gender: string, age: number, height: number, weight: number, stepsgoal: number) {
     await this.storage.set('name', name);
     await this.storage.set('gender', gender);
     await this.storage.set('age', age);
     await this.storage.set('height', height);
     await this.storage.set('weight', weight);
-  }
-
-  async getStepGoal() {
-
-  }
-
-  async setStepGoal() {
-
+    await this.storage.set('stepsgoal', stepsgoal);
   }
 }

@@ -57,6 +57,12 @@
         placeholder="..pounds"></ion-input>
     </ion-item>
 
+    <ion-item color="medium">
+      <ion-label>Steps Goal:</ion-label>
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profiledata.varStepsGoal"
+        placeholder="..steps"></ion-input>
+    </ion-item>
+
     <ion-button full (click)="savePersonalInfo()">Save</ion-button>
 
     <ion-card>Total Water Drank:</ion-card>

@@ -18,12 +18,15 @@ export class ProfilePage implements OnInit {
 
   savePersonalInfo() {
     this.profiledata.changeUserInfo();
+    this.profiledata.healthKit.saveHeight({ unit: 'in', amount: this.profiledata.userHeight });
+    this.profiledata.healthKit.saveWeight({ unit: 'lb', amount: this.profiledata.userWeight });
     this.myapp.storeBodyInfo(
       this.profiledata.userName,
       this.profiledata.userGender,
       this.profiledata.userAge,
       this.profiledata.userHeight,
-      this.profiledata.userWeight
+      this.profiledata.userWeight,
+      this.profiledata.userStepsGoal
     );
   }
 

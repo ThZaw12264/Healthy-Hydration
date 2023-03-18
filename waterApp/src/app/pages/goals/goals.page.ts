@@ -10,7 +10,7 @@ export class GoalsPage implements OnInit, OnDestroy {
   options: any;
   updateOptions: any;
 
-  constructor(private profiledata: ProfileData) { }
+  constructor(public profiledata: ProfileData) { }
 
   ngOnInit(): void {
 
@@ -78,6 +78,8 @@ export class GoalsPage implements OnInit, OnDestroy {
         }]
       };
     }, 1000)
+
+    this.displayStepsTitle();
   }
 
   ngOnDestroy() {
@@ -90,5 +92,17 @@ export class GoalsPage implements OnInit, OnDestroy {
         data: this.profiledata.userStepsData
       }]
     };
+    this.displayStepsTitle();
+  }
+
+  displayStepsTitle() {
+    let el = document.getElementById('stepsTitle')!;
+    let stepsTitle;
+    if (this.profiledata.userStepsGoalReached) {
+        stepsTitle = "You reached your Daily Step Goal!"
+    } else {
+        stepsTitle = "Keep reaching your Daily Step Goal!"
+    }
+    el.insertAdjacentHTML('afterbegin',stepsTitle);
   }
 }
