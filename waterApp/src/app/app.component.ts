@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
 
           this.profiledata.healthKit.requestAuthorization(options).then(_ => {
             this.profiledata.loadTodayStepData();
-            this.profiledata.load6HrStepData();
+            this.profiledata.load5HrStepData();
             this.profiledata.timer = setInterval(() => {
               this.profiledata.loadLiveStepData();
               this.goalspage.updateGraph();

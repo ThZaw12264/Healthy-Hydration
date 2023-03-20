@@ -22,18 +22,7 @@ export class GoalsPage implements OnInit, OnDestroy {
           trigger: 'axis',
           formatter: function (params) {
             params = params[0].data;
-            const date = new Date(params.name);
-            let label;
-            if (date.getHours() == 0) {
-              label = date.getHours() + 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " AM" + ' : ' + params.value[1];
-            } else if (date.getHours() == 12) {
-              label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " PM" + ' : ' + params.value[1];
-            } else if (date.getHours() < 12) {
-              label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " AM" + ' : ' + params.value[1];
-            } else {
-              label = date.getHours() - 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " PM" + ' : ' + params.value[1];
-            }
-            return label;
+            return params.value[1] + ' Steps';
           },
           axisPointer: {
             animation: false
@@ -74,7 +63,10 @@ export class GoalsPage implements OnInit, OnDestroy {
           },
           data: this.profiledata.userStepsData,
           barWidth: 25
-        }]
+        }],
+        grid: {
+          containLabel: true
+        }
       };
     }, 1000)
 
@@ -86,12 +78,14 @@ export class GoalsPage implements OnInit, OnDestroy {
   }
 
   updateGraph() {
-    this.profiledata.stepGraphUpdateOptions = {
-      series: [{
-        data: this.profiledata.userStepsData
-      }]
-    };
-    this.displayStepsTitle();
+    setTimeout(() => {
+      this.profiledata.stepGraphUpdateOptions = {
+        series: [{
+          data: this.profiledata.userStepsData
+        }]
+      };
+      this.displayStepsTitle();
+    }, 1000);
   }
 
   displayStepsTitle() {

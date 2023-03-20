@@ -23,7 +23,7 @@ export class ProfileData {
 
     //steps
     public timer: any;
-    //steps data for past 6 hours
+    //steps data for past 5 hours
     public userStepsData: any = [];
     public userDailyStepsCount: number = 0;
     public userStepsGoalReached: boolean = false;
@@ -42,6 +42,8 @@ export class ProfileData {
     checkStepsGoalReached() {
         if (this.userDailyStepsCount >= this.userStepsGoal) { 
             this.userStepsGoalReached = true;
+        } else {
+            this.userStepsGoalReached = false;
         }
     }
 
@@ -66,11 +68,11 @@ export class ProfileData {
     }
 
     //did not load 12:00AM steps into the graph or stepcount, possibly considered it yesterday's
-    async load6HrStepData() {
+    async load5HrStepData() {
         let rounded_date = new Date();
         rounded_date.setMinutes((Math.floor(rounded_date.getMinutes() / 30) * 30), 0, 0);
         
-        for (let halfhour = 11; halfhour > 0; --halfhour) {
+        for (let halfhour = 9; halfhour > 0; --halfhour) {
             let sd = new Date(rounded_date.getTime() - halfhour * 1800 * 1000);
             //ending date 100 milliseconds behind for no overlaps
             let ed = new Date(rounded_date.getTime() - (halfhour - 1) * 1800 * 1000 - 100);
@@ -108,13 +110,12 @@ export class ProfileData {
         if (sd.getDay() == lastStepElement.name.getDay()) {
             this.userDailyStepsCount += stepSum;
         } else {
-            this.userStepsGoalReached = false; 
             this.userDailyStepsCount = stepSum;
         }
         this.checkStepsGoalReached();
 
         //add steps to most recent date if within range, otherwise create a new bar
-        if (sd.getTime() < lastStepElement.name.getTime() + 30 * 60000) {
+        if (sd.getTime() < lastStepElement.name.getTime() + 15 * 60000) {
             this.userStepsData[this.userStepsData.length - 1].value[1] += stepSum;
         } else {
             let stepDate = sd;

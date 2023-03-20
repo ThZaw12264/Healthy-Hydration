@@ -9,7 +9,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { GoalsPage } from './pages/goals/goals.page';
 import { ProfilePage } from './pages/profile/profile.page';
-import { ProfileData } from './pages/profile/profile.data';
 
 import { HealthKit } from '@ionic-native/health-kit/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';

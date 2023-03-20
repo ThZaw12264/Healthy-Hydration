@@ -28,6 +28,7 @@ export class ProfilePage implements OnInit {
       this.profiledata.userWeight,
       this.profiledata.userStepsGoal
     );
+    this.profiledata.checkStepsGoalReached();
   }
 
   // loadYesterdayData() {
