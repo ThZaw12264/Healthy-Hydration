@@ -7,8 +7,6 @@ import { ProfileData } from '../profile/profile.data';;
   styleUrls: ['./goals.page.scss'],
 })
 export class GoalsPage implements OnInit, OnDestroy {
-  options: any;
-  updateOptions: any;
 
   constructor(public profiledata: ProfileData) { }
 
@@ -16,14 +14,14 @@ export class GoalsPage implements OnInit, OnDestroy {
 
     // initialize chart options:
     setTimeout(() => {
-      this.options = {
+      this.profiledata.stepGraphOptions = {
         title: {
           text: 'Your Steps'
         },
         tooltip: {
           trigger: 'axis',
-          formatter: (params) => {
-            params = params[0];
+          formatter: function (params) {
+            params = params[0].data;
             const date = new Date(params.name);
             let label;
             if (date.getHours() == 0) {
@@ -74,7 +72,8 @@ export class GoalsPage implements OnInit, OnDestroy {
           emphasis: {
             line: false,
           },
-          data: this.profiledata.userStepsData
+          data: this.profiledata.userStepsData,
+          barWidth: 25
         }]
       };
     }, 1000)
@@ -87,7 +86,7 @@ export class GoalsPage implements OnInit, OnDestroy {
   }
 
   updateGraph() {
-    this.updateOptions = {
+    this.profiledata.stepGraphUpdateOptions = {
       series: [{
         data: this.profiledata.userStepsData
       }]
@@ -96,13 +95,10 @@ export class GoalsPage implements OnInit, OnDestroy {
   }
 
   displayStepsTitle() {
-    let el = document.getElementById('stepsTitle')!;
-    let stepsTitle;
     if (this.profiledata.userStepsGoalReached) {
-        stepsTitle = "You reached your Daily Step Goal!"
+      document.getElementById('stepsTitle')!.innerHTML = "You reached your Daily Step Goal!"
     } else {
-        stepsTitle = "Keep reaching your Daily Step Goal!"
+      document.getElementById('stepsTitle')!.innerHTML = "Keep reaching your Daily Step Goal!"
     }
-    el.insertAdjacentHTML('afterbegin',stepsTitle);
   }
 }

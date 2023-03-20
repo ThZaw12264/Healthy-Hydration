@@ -21,11 +21,14 @@ export class ProfileData {
     public userWeight!: number;
     public userStepsGoal!: number;
 
-    //step count for past 4 hours
+    //steps
     public timer: any;
+    //steps data for past 6 hours
     public userStepsData: any = [];
     public userDailyStepsCount: number = 0;
     public userStepsGoalReached: boolean = false;
+    public stepGraphOptions: any;
+    public stepGraphUpdateOptions: any;
 
     changeUserInfo() {
         this.userName = this.varName;
@@ -36,110 +39,93 @@ export class ProfileData {
         this.userStepsGoal = this.varStepsGoal;
     }
 
-    queryStepCount(sd: Date, ed: Date) {
+    checkStepsGoalReached() {
+        if (this.userDailyStepsCount >= this.userStepsGoal) { 
+            this.userStepsGoalReached = true;
+        }
+    }
+
+    async queryStepCount(sd: Date, ed: Date) {
         var stepOptions = {
             startDate: sd,
             endDate: ed,
             sampleType: 'HKQuantityTypeIdentifierStepCount',
             unit: 'count'
         }
+        let data = await this.healthKit.querySampleType(stepOptions);
+        return data.reduce((a, b) => a + b.quantity, 0);
+    }
 
-        this.healthKit.querySampleType(stepOptions).then(data => {
-            let stepSum = data.reduce((a, b) => a + b.quantity, 0);
+    async loadTodayStepData() {
+        let sd = new Date();
+        sd.setHours(0, 0, 0, 0);
+        let ed = new Date();
 
+        this.userDailyStepsCount = await this.queryStepCount(sd,ed);
+        this.checkStepsGoalReached();
+    }
+
+    //did not load 12:00AM steps into the graph or stepcount, possibly considered it yesterday's
+    async load6HrStepData() {
+        let rounded_date = new Date();
+        rounded_date.setMinutes((Math.floor(rounded_date.getMinutes() / 30) * 30), 0, 0);
+        
+        for (let halfhour = 11; halfhour > 0; --halfhour) {
+            let sd = new Date(rounded_date.getTime() - halfhour * 1800 * 1000);
+            //ending date 100 milliseconds behind for no overlaps
+            let ed = new Date(rounded_date.getTime() - (halfhour - 1) * 1800 * 1000 - 100);
+
+            let stepSum = await this.queryStepCount(sd, ed);
+            let stepDate = new Date(sd.getTime() + 15 * 60000);
             this.userStepsData.push({
-                name: sd,
+                name: stepDate,
                 value: [
-                    [sd.getFullYear(), sd.getMonth() + 1, sd.getDate()].join('/') + 'T' + [sd.getHours(), sd.getMinutes()].join(':'),
+                    [stepDate.getFullYear(), stepDate.getMonth() + 1, stepDate.getDate()].join('/') + 'T' + [stepDate.getHours(), stepDate.getMinutes()].join(':'),
+                    stepSum
+                ]
+            });
+        }
+
+        let stepSum = await this.queryStepCount(rounded_date, new Date());
+        let stepDate = new Date(rounded_date.getTime() + 15 * 60000);
+        this.userStepsData.push({
+            name: stepDate,
+            value: [
+                [stepDate.getFullYear(), stepDate.getMonth() + 1, stepDate.getDate()].join('/') + 'T' + [stepDate.getHours(), stepDate.getMinutes()].join(':'),
+                stepSum
+            ]
+        });
+    }
+
+    async loadLiveStepData() {
+        //updates every minute
+        let sd = new Date(new Date().getTime() - 60000);
+        //ending date 100 milliseconds behind for no overlaps
+        let ed = new Date(new Date().getTime() - 100);
+        let stepSum = await this.queryStepCount(sd, ed);
+        let lastStepElement = this.userStepsData[this.userStepsData.length - 1];
+        //add to userDayStepCount
+        if (sd.getDay() == lastStepElement.name.getDay()) {
+            this.userDailyStepsCount += stepSum;
+        } else {
+            this.userStepsGoalReached = false; 
+            this.userDailyStepsCount = stepSum;
+        }
+        this.checkStepsGoalReached();
+
+        //add steps to most recent date if within range, otherwise create a new bar
+        if (sd.getTime() < lastStepElement.name.getTime() + 30 * 60000) {
+            this.userStepsData[this.userStepsData.length - 1].value[1] += stepSum;
+        } else {
+            let stepDate = sd;
+            stepDate.setMinutes((Math.floor(stepDate.getMinutes() / 30) * 30) + 15 , 0, 0);
+            this.userStepsData.push({
+                name: stepDate,
+                value: [
+                    [stepDate.getFullYear(), stepDate.getMonth() + 1, stepDate.getDate()].join('/') + 'T' + [stepDate.getHours(), stepDate.getMinutes()].join(':'),
                     Math.round(stepSum)
                 ]
             });
-        }, err => {
-            console.log('No steps: ', err);
-        });
-    }
-
-    loadTodayStepData() {
-        let sd = new Date();
-        sd.setHours(0, 0, 0);
-        let ed = new Date();
-
-        var stepOptions = {
-            startDate: sd,
-            endDate: ed,
-            sampleType: 'HKQuantityTypeIdentifierStepCount',
-            unit: 'count'
         }
-
-        this.healthKit.querySampleType(stepOptions).then(data => {
-            let stepSum = data.reduce((a, b) => a + b.quantity, 0);
-            this.userDailyStepsCount = stepSum;
-            if (this.userDailyStepsCount >= this.userStepsGoal) { 
-                this.userStepsGoalReached = true;
-            }
-        }, err => {
-            console.log('No steps: ', err);
-        });
-    }
-
-    load4HrStepData() {
-        let rounded_date = new Date();
-        rounded_date.setMinutes((Math.floor(rounded_date.getMinutes() / 30) * 30), 0);
-        for (let halfhour = 7; halfhour > 0; --halfhour) {
-            let sd = new Date(rounded_date.getTime() - halfhour * 1800 * 1000);
-            //ending date 1 second behind for no overlaps
-            let ed = new Date(rounded_date.getTime() - (halfhour - 1) * 1800 * 1000 - 1000);
-            this.queryStepCount(sd, ed);
-        }
-        this.queryStepCount(rounded_date, new Date());
-    }
-
-    loadLiveStepData() {
-        //updates every minute
-        let sd = new Date(new Date().getTime() - 60000);
-        //ending date 1 second behind for no overlaps
-        let ed = new Date(new Date().getTime() - 1000);
-
-        var stepOptions = {
-            startDate: sd,
-            endDate: ed,
-            sampleType: 'HKQuantityTypeIdentifierStepCount',
-            unit: 'count'
-        }
-
-        this.healthKit.querySampleType(stepOptions).then(data => {
-            let stepSum = data.reduce((a, b) => a + b.quantity, 0);
-            let lastStepElement = this.userStepsData[this.userStepsData.length - 1];
-            //add to userDayStepCount
-            if (sd.getHours() >= lastStepElement.name.getHours()) {
-                this.userDailyStepsCount += stepSum;
-                if (this.userDailyStepsCount >= this.userStepsGoal) { 
-                    this.userStepsGoalReached = true; 
-                }
-            } else {
-                this.userStepsGoalReached = false; 
-                this.userDailyStepsCount = stepSum;
-                if (this.userDailyStepsCount >= this.userStepsGoal) { 
-                    this.userStepsGoalReached = true; 
-                }
-            }
-
-            //add steps to most recent date if within range, otherwise create a new bar
-            if (sd.getMinutes() < lastStepElement.name.getMinutes() || sd.getMinutes() >= lastStepElement.name.getMinutes() + 30) {
-                let rounded_date = sd;
-                rounded_date.setMinutes(Math.floor(rounded_date.getMinutes() / 30) * 30 , 0);
-                this.userStepsData.push({
-                    name: rounded_date,
-                    value: [
-                        [rounded_date.getFullYear(), rounded_date.getMonth() + 1, rounded_date.getDate()].join('/') + 'T' + [rounded_date.getHours(), rounded_date.getMinutes()].join(':'),
-                        Math.round(stepSum)
-                    ]
-                });
-            } else {
-                this.userStepsData[this.userStepsData.length - 1].value[1] += stepSum;
-            }
-        }, err => {
-            console.log('No steps: ', err);
-        });
     }
 }
