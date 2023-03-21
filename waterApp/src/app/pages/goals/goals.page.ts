@@ -7,8 +7,6 @@ import { ProfileData } from '../profile/profile.data';;
   styleUrls: ['./goals.page.scss'],
 })
 export class GoalsPage implements OnInit, OnDestroy {
-  options: any;
-  updateOptions: any;
 
   constructor(public profiledata: ProfileData) { }
 
@@ -16,26 +14,15 @@ export class GoalsPage implements OnInit, OnDestroy {
 
     // initialize chart options:
     setTimeout(() => {
-      this.options = {
+      this.profiledata.stepGraphOptions = {
         title: {
           text: 'Your Steps'
         },
         tooltip: {
           trigger: 'axis',
-          formatter: (params) => {
-            params = params[0];
-            const date = new Date(params.name);
-            let label;
-            if (date.getHours() == 0) {
-              label = date.getHours() + 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " AM" + ' : ' + params.value[1];
-            } else if (date.getHours() == 12) {
-              label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " PM" + ' : ' + params.value[1];
-            } else if (date.getHours() < 12) {
-              label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " AM" + ' : ' + params.value[1];
-            } else {
-              label = date.getHours() - 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " PM" + ' : ' + params.value[1];
-            }
-            return label;
+          formatter: function (params) {
+            params = params[0].data;
+            return params.value[1] + ' Steps';
           },
           axisPointer: {
             animation: false
@@ -74,8 +61,12 @@ export class GoalsPage implements OnInit, OnDestroy {
           emphasis: {
             line: false,
           },
-          data: this.profiledata.userStepsData
-        }]
+          data: this.profiledata.userStepsData,
+          barWidth: 25
+        }],
+        grid: {
+          containLabel: true
+        }
       };
     }, 1000)
 
@@ -87,22 +78,21 @@ export class GoalsPage implements OnInit, OnDestroy {
   }
 
   updateGraph() {
-    this.updateOptions = {
-      series: [{
-        data: this.profiledata.userStepsData
-      }]
-    };
-    this.displayStepsTitle();
+    setTimeout(() => {
+      this.profiledata.stepGraphUpdateOptions = {
+        series: [{
+          data: this.profiledata.userStepsData
+        }]
+      };
+      this.displayStepsTitle();
+    }, 1000);
   }
 
   displayStepsTitle() {
-    let el = document.getElementById('stepsTitle')!;
-    let stepsTitle;
     if (this.profiledata.userStepsGoalReached) {
-        stepsTitle = "You reached your Daily Step Goal!"
+      document.getElementById('stepsTitle')!.innerHTML = "You reached your Daily Step Goal!"
     } else {
-        stepsTitle = "Keep reaching your Daily Step Goal!"
+      document.getElementById('stepsTitle')!.innerHTML = "Keep reaching your Daily Step Goal!"
     }
-    el.insertAdjacentHTML('afterbegin',stepsTitle);
   }
 }

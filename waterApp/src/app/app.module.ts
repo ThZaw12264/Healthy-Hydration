@@ -9,7 +9,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { GoalsPage } from './pages/goals/goals.page';
 import { ProfilePage } from './pages/profile/profile.page';
-import { ProfileData } from './pages/profile/profile.data';
 
 import { HealthKit } from '@ionic-native/health-kit/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';
@@ -26,7 +25,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     }),
     AppRoutingModule
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, HealthKit, ProfileData, ProfilePage, GoalsPage, AppComponent],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, HealthKit, ProfilePage, GoalsPage, AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
