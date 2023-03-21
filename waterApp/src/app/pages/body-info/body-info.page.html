@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-    <p class="ion-padding-horizontal">Before we start, let's get to know more about you!</p>
+    <h5 class="ion-padding-horizontal">Before we start, let's know more about you!</h5>
 
     <ion-item color="light">
         <ion-label position="stacked">What's your name?</ion-label>
@@ -38,8 +38,21 @@
         <ion-input type="number" [(ngModel)]="profiledata.varWeight" placeholder="..pounds"></ion-input>
     </ion-item>
 
-    <ion-item>
-        <ion-label position="stacked">How many steps do you try to reach per day?</ion-label>
+    <h5 class="ion-padding-horizontal">For each day...</h5>
+
+    <ion-item color="light">
+        <ion-label position="stacked">How many steps do you try to reach?</ion-label>
         <ion-input type="number" [(ngModel)]="profiledata.varStepsGoal" placeholder="..steps"></ion-input>
     </ion-item>
+
+    <ion-item>
+        <ion-label position="stacked">How many kilometers do you try to reach? (Walking or Running)</ion-label>
+        <ion-input type="number" [(ngModel)]="profiledata.varDistanceGoal" placeholder="..kilometers"></ion-input>
+    </ion-item>
+
+    <ion-item color="light">
+        <ion-label position="stacked">How many calories do you try to burn?</ion-label>
+        <ion-input type="number" [(ngModel)]="profiledata.varNrgBurnedGoal" placeholder="..calories"></ion-input>
+    </ion-item>
+
 </ion-content>

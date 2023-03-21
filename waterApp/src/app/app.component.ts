@@ -36,19 +36,17 @@ export class AppComponent implements OnInit {
               'HKQuantityTypeIdentifierAppleStandTime',
               'HKQuantityTypeIdentifierHeartRate',
               'HKQuantityTypeIdentifierRestingHeartRate',
-              'HKCategoryTypeIdentifierSleepAnalysis'
             ],
             writeTypes: [
               'HKQuantityTypeIdentifierHeight',
               'HKQuantityTypeIdentifierBodyMass'
             ]
           }
-
           this.profiledata.healthKit.requestAuthorization(options).then(_ => {
-            this.profiledata.loadTodayStepData();
-            this.profiledata.load5HrStepData();
+            this.profiledata.loadTodaysData();
+            this.profiledata.loadLast6HrsData();
             this.profiledata.timer = setInterval(() => {
-              this.profiledata.loadLiveStepData();
+              this.profiledata.loadLiveData();
               this.goalspage.updateGraph();
             }, 60000);
           });
@@ -78,15 +76,19 @@ export class AppComponent implements OnInit {
     this.profiledata.varHeight = await this.storage.get('height');
     this.profiledata.varWeight = await this.storage.get('weight');
     this.profiledata.varStepsGoal = await this.storage.get('stepsgoal');
+    this.profiledata.varDistanceGoal = await this.storage.get('distancegoal');
+    this.profiledata.varNrgBurnedGoal = await this.storage.get('nrgburnedgoal');
     this.profiledata.changeUserInfo();
   }
 
-  async storeBodyInfo(name: string, gender: string, age: number, height: number, weight: number, stepsgoal: number) {
+  async storeBodyInfo(name: string, gender: string, age: number, height: number, weight: number, stepsgoal: number, distancegoal: number, nrgburnedgoal: number) {
     await this.storage.set('name', name);
     await this.storage.set('gender', gender);
     await this.storage.set('age', age);
     await this.storage.set('height', height);
     await this.storage.set('weight', weight);
     await this.storage.set('stepsgoal', stepsgoal);
+    await this.storage.set('distancegoal', distancegoal);
+    await this.storage.set('nrgburnedgoal', nrgburnedgoal);
   }
 }

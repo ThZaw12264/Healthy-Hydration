@@ -22,7 +22,7 @@ export class GoalsPage implements OnInit, OnDestroy {
           trigger: 'axis',
           formatter: function (params) {
             params = params[0].data;
-            return params.value[1] + ' Steps';
+            return params[1] + ' Steps';
           },
           axisPointer: {
             animation: false
@@ -35,13 +35,13 @@ export class GoalsPage implements OnInit, OnDestroy {
               const date = new Date(value);
               let label;
               if (date.getHours() == 0) {
-                label = date.getHours() + 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " AM";
+                label = date.getHours() + 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + "AM";
               } else if (date.getHours() == 12) {
-                label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " PM";
+                label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + "PM";
               } else if (date.getHours() < 12) {
-                label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " AM";
+                label = date.getHours() + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + "AM";
               } else {
-                label = date.getHours() - 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + " PM";
+                label = date.getHours() - 12 + ":" + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + "PM";
               }
               return label;
             }
@@ -52,7 +52,7 @@ export class GoalsPage implements OnInit, OnDestroy {
         },
         yAxis: {
           type: 'value',
-          boundaryGap: [0, '100%'],
+          boundaryGap: [0, '100%']
         },
         series: [{
           name: 'Steps Data',
@@ -62,10 +62,10 @@ export class GoalsPage implements OnInit, OnDestroy {
             line: false,
           },
           data: this.profiledata.userStepsData,
-          barWidth: 25
+          barWidth: '100%'
         }],
         grid: {
-          containLabel: true
+          left: '11%'
         }
       };
     }, 1000)
@@ -89,7 +89,7 @@ export class GoalsPage implements OnInit, OnDestroy {
   }
 
   displayStepsTitle() {
-    if (this.profiledata.userStepsGoalReached) {
+    if (this.profiledata.userDailyStepsCount >= this.profiledata.userStepsGoal) {
       document.getElementById('stepsTitle')!.innerHTML = "You reached your Daily Step Goal!"
     } else {
       document.getElementById('stepsTitle')!.innerHTML = "Keep reaching your Daily Step Goal!"

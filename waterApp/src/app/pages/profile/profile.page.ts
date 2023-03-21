@@ -26,9 +26,10 @@ export class ProfilePage implements OnInit {
       this.profiledata.userAge,
       this.profiledata.userHeight,
       this.profiledata.userWeight,
-      this.profiledata.userStepsGoal
+      this.profiledata.userStepsGoal,
+      this.profiledata.userDistanceGoal,
+      this.profiledata.userNrgBurnedGoal
     );
-    this.profiledata.checkStepsGoalReached();
   }
 
   // loadYesterdayData() {
