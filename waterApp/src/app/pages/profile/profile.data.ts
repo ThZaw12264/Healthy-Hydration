@@ -15,6 +15,7 @@ export class ProfileData {
     public varStepsGoal!: number;
     public varDistanceGoal!: number;
     public varNrgBurnedGoal!: number;
+    public varZIPCode!: number;
     //saved body data used for calculations
     public userName!: string;
     public userGender!: string;
@@ -24,13 +25,14 @@ export class ProfileData {
     public userStepsGoal!: number;
     public userDistanceGoal!: number;
     public userNrgBurnedGoal!: number;
+    public userZIPCode!: number;
 
-    //save zip code
-    public zipCode!: number;
+    //hydration score to the recommended water amount
+    public hydrationScore!: number;
     
     //steps
     public timer: any;
-    //steps data for past 5 hours
+    //steps data for past 6 hours
     public userStepsData: any = [];
     public userDailyStepsCount: number = 0;
     //public userStepsGoalReached: boolean = false;
@@ -56,6 +58,7 @@ export class ProfileData {
         this.userStepsGoal = this.varStepsGoal;
         this.userDistanceGoal = this.varDistanceGoal;
         this.userNrgBurnedGoal = this.varNrgBurnedGoal;
+        this.userZIPCode = this.varZIPCode;
     }
 
     async queryStepCount(sd: Date, ed: Date) {

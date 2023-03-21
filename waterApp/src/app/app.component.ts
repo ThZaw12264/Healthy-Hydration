@@ -78,10 +78,11 @@ export class AppComponent implements OnInit {
     this.profiledata.varStepsGoal = await this.storage.get('stepsgoal');
     this.profiledata.varDistanceGoal = await this.storage.get('distancegoal');
     this.profiledata.varNrgBurnedGoal = await this.storage.get('nrgburnedgoal');
+    this.profiledata.varZIPCode = await this.storage.get('zipcode');
     this.profiledata.changeUserInfo();
   }
 
-  async storeBodyInfo(name: string, gender: string, age: number, height: number, weight: number, stepsgoal: number, distancegoal: number, nrgburnedgoal: number) {
+  async storeBodyInfo(name: string, gender: string, age: number, height: number, weight: number, stepsgoal: number, distancegoal: number, nrgburnedgoal: number, zipcode: number) {
     await this.storage.set('name', name);
     await this.storage.set('gender', gender);
     await this.storage.set('age', age);
@@ -90,5 +91,6 @@ export class AppComponent implements OnInit {
     await this.storage.set('stepsgoal', stepsgoal);
     await this.storage.set('distancegoal', distancegoal);
     await this.storage.set('nrgburnedgoal', nrgburnedgoal);
+    await this.storage.set('zipcode', zipcode);
   }
 }

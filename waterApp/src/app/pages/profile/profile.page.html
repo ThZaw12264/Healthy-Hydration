@@ -57,13 +57,32 @@
         placeholder="..pounds"></ion-input>
     </ion-item>
 
-    <ion-item color="medium">
+    <ion-item color="secondary">
       <ion-label>Steps Goal:</ion-label>
       <ion-input class="ion-text-right" type="number" [(ngModel)]="profiledata.varStepsGoal"
         placeholder="..steps"></ion-input>
     </ion-item>
 
-    <ion-button full (click)="savePersonalInfo()">Save</ion-button>
+    <ion-item color="secondary">
+      <ion-label>Distance Goal (km):</ion-label>
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profiledata.varDistanceGoal"
+        placeholder="..kilometers"></ion-input>
+    </ion-item>
+
+    <ion-item color="secondary">
+      <ion-label>Burn Goal (cal):</ion-label>
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profiledata.varNrgBurnedGoal"
+        placeholder="..calories"></ion-input>
+    </ion-item>
+
+    <ion-item color="light">
+      <ion-label>ZIP Code:</ion-label>
+      <ion-input class="ion-text-right" type="number" [(ngModel)]="profiledata.varZIPCode"
+        placeholder="..calories"></ion-input>
+    </ion-item>
+
+    &nbsp;
+    <ion-button expand="block" (click)="savePersonalInfo()">Save</ion-button>
 
     <ion-card>Total Water Drank:</ion-card>
     <ion-card>Goals Reached:</ion-card>

@@ -28,7 +28,8 @@ export class ProfilePage implements OnInit {
       this.profiledata.userWeight,
       this.profiledata.userStepsGoal,
       this.profiledata.userDistanceGoal,
-      this.profiledata.userNrgBurnedGoal
+      this.profiledata.userNrgBurnedGoal,
+      this.profiledata.userZIPCode
     );
   }
 
