@@ -25,6 +25,9 @@ export class ProfileData {
     public userDistanceGoal!: number;
     public userNrgBurnedGoal!: number;
 
+    //save zip code
+    public zipCode!: number;
+    
     //steps
     public timer: any;
     //steps data for past 5 hours
