@@ -89,7 +89,8 @@ def calculate(current, data):
 def regress():
     data = request.json
     prediction = calculate(data)
-    return jsonify(result=prediction)
+    return jsonify(status="success", result=prediction)
+
 
 
 if __name__ == '__main__':
