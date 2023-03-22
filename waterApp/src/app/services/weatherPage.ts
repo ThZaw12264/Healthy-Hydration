@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { WeatherService } from '../services/weather.service';
+import { IonRange } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -9,11 +10,11 @@ import { WeatherService } from '../services/weather.service';
 export class HomePage {
   zipCode: string = "";
   weatherData: any;
-  
-  //data from API call involving temperature
+
   private kelvinTemp: number = 0;
   private humid: number = 0;
   private newTemp: number = 0;
+  hydrationValue: number = 0;
 
   constructor(private weatherService: WeatherService) { }
 
@@ -32,5 +33,12 @@ export class HomePage {
     } catch (error) {
       console.error('Error getting latitude and longitude:', error);
     }
+  }
+
+  // Hydration slider change handler
+  onHydrationChange(event: any) {
+    this.hydrationValue = event.detail.value as number;
+    //make it so when thar calls all the api's the hydration level is saved
+    console.log('Hydration level:', this.hydrationValue);
   }
 }
