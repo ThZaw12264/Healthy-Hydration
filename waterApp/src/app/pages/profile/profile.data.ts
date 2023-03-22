@@ -28,7 +28,12 @@ export class ProfileData {
     public userZIPCode!: number;
 
     //hydration score to the recommended water amount
-    public hydrationScore!: number;
+    public hydrationScore: number = 5;
+    public waterAmount: number = 2600;
+
+    //weather
+    public humidity!: number;
+    public temperature!: number;
     
     //steps
     public timer: any;

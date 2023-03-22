@@ -13,6 +13,7 @@ import { ProfilePage } from './pages/profile/profile.page';
 import { HealthKit } from '@ionic-native/health-kit/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,7 +24,8 @@ import { NgxEchartsModule } from 'ngx-echarts';
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     }),
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, HealthKit, ProfilePage, GoalsPage, AppComponent],
   bootstrap: [AppComponent],

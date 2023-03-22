@@ -20,19 +20,41 @@
   </ion-list> -->
   <!-- <ion-content class="ion-padding">This is the menu content.</ion-content> -->
   <!-- </ion-menu> -->
-  <div class="ion-page" id="main-content">
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-menu-button></ion-menu-button>
-        </ion-buttons>
-        <ion-title>Hi {{profiledata.userName}}</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      Tap the button in the toolbar to open the menu.
-    </ion-content>
-  </div>
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Hi {{profiledata.userName}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Your recommended amount for today: {{profiledata.waterAmount}} mL</ion-card-title>
+      </ion-card-header>
+    </ion-card>
+
+      <ion-label>How hydrated did you feel from drinking the recommended amount?</ion-label>
+      <ion-range [ticks]="true" [snaps]="true" min="0" max="10" step="1" [(ngModel)]="profiledata.hydrationScore">
+        <ion-label slot="start"><small>TOO LITTLE</small></ion-label>
+        <ion-label slot="end"><small>TOO MUCH</small></ion-label>
+      </ion-range>
+    <ion-item>
+      <ion-label>Your hydration level: {{profiledata.hydrationScore}}</ion-label>
+    </ion-item>
+
+    &nbsp;
+    <ion-item>
+      <ion-label>Body Water Content:</ion-label>
+      <ion-input type="number" placeholder="...%"></ion-input>
+    </ion-item>
+
+    &nbsp;
+    <ion-button expand="block" (click)="recommendWater()">Get Today's Water Amount</ion-button>
+
+  </ion-content>
 
 </ion-content>
 
