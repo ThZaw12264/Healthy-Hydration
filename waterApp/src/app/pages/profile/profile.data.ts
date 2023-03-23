@@ -27,8 +27,9 @@ export class ProfileData {
     public userNrgBurnedGoal!: number;
     public userZIPCode!: number;
 
-    //hydration score to the recommended water amount
+    //water
     public hydrationScore: number = 5;
+    public bodyWaterContent: number = 60;
     public waterAmount: number = 2600;
 
     //weather
@@ -139,7 +140,7 @@ export class ProfileData {
         this.pushUserData(rounded_date, stepSum, distanceSum, nrgBurnedSum);
     }
 
-    async loadLiveData() {
+    async loadLiveData(updateGraphCallBack: Function) {
         let sd = new Date(new Date().getTime() - 60000);
         let ed = new Date(new Date().getTime() - 100);
 
@@ -167,5 +168,16 @@ export class ProfileData {
             this.userNrgBurnedData.shift();
             this.pushUserData(sd, stepSum, distanceSum, nrgBurnedSum);
         }
+        updateGraphCallBack();
+    }
+
+    async queryYesterdayNrgBurned() {
+        let sd = new Date();
+        sd.setDate(sd.getDate() - 1);
+        sd.setHours(0, 0, 0, 0);
+        let ed = new Date();
+        ed.setHours(0, 0, 0, 0);
+
+        return this.queryEnergyBurned(sd,ed);
     }
 }

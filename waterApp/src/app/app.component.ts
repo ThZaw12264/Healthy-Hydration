@@ -46,8 +46,9 @@ export class AppComponent implements OnInit {
             this.profiledata.loadTodaysData();
             this.profiledata.loadLast6HrsData();
             this.profiledata.timer = setInterval(() => {
-              this.profiledata.loadLiveData();
-              this.goalspage.updateGraph();
+              this.profiledata.loadLiveData(() => {
+                this.goalspage.updateGraph();
+              });
             }, 60000);
           });
         }
@@ -67,6 +68,22 @@ export class AppComponent implements OnInit {
     } else {
       modal.present();
     }
+
+    //fill up step chart with demo values
+    this.profiledata.userStepsData = [
+      ["2023-03-19T00:15:00.864Z",0],
+      ["2023-03-19T00:45:00.864Z",0],
+      ["2023-03-19T01:15:00.864Z",0],
+      ["2023-03-19T01:45:00.864Z",0],
+      ["2023-03-19T02:15:00.864Z",500],
+      ["2023-03-19T02:45:00.864Z",0],
+      ["2023-03-19T03:15:00.864Z",100],
+      ["2023-03-19T03:45:00.864Z",100],
+      ["2023-03-19T04:15:00.864Z",300],
+      ["2023-03-19T04:45:00.864Z",0],
+      ["2023-03-19T05:15:00.864Z",400],
+      ["2023-03-19T05:45:00.864Z",0]
+    ];
   }
 
   async getStoredBodyInfo() {
@@ -82,15 +99,31 @@ export class AppComponent implements OnInit {
     this.profiledata.changeUserInfo();
   }
 
-  async storeBodyInfo(name: string, gender: string, age: number, height: number, weight: number, stepsgoal: number, distancegoal: number, nrgburnedgoal: number, zipcode: number) {
-    await this.storage.set('name', name);
-    await this.storage.set('gender', gender);
-    await this.storage.set('age', age);
-    await this.storage.set('height', height);
-    await this.storage.set('weight', weight);
-    await this.storage.set('stepsgoal', stepsgoal);
-    await this.storage.set('distancegoal', distancegoal);
-    await this.storage.set('nrgburnedgoal', nrgburnedgoal);
-    await this.storage.set('zipcode', zipcode);
+  storeBodyInfo(name: string, gender: string, age: number, height: number, weight: number, stepsgoal: number, distancegoal: number, nrgburnedgoal: number, zipcode: number) {
+    this.storage.set('name', name);
+    this.storage.set('gender', gender);
+    this.storage.set('age', age);
+    this.storage.set('height', height);
+    this.storage.set('weight', weight);
+    this.storage.set('stepsgoal', stepsgoal);
+    this.storage.set('distancegoal', distancegoal);
+    this.storage.set('nrgburnedgoal', nrgburnedgoal);
+    this.storage.set('zipcode', zipcode);
+  }
+
+  async loadJSONData() {
+    const val = await this.storage.get('userdata');
+    if (val) {
+      return JSON.parse(val);
+    } else {
+      //calculate needs a 2D Matrix not a 1D, so fill with demo value for now
+      this.storage.set('userdata', '[{"date": "2021-01-04", "body_water": 62.1, "water_drank": 2509.12, "activity_time": 14340.0, "avg_temp": 14.0, "avg_hum": 66.25, "score": 6}]');
+      return this.loadJSONData();
+      //return JSON.parse('[]');
+    }
+  }
+
+  saveJSONData(JSONObject) {
+    this.storage.set('userdata', JSON.stringify(JSONObject));
   }
 }

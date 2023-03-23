@@ -78,14 +78,12 @@ export class GoalsPage implements OnInit, OnDestroy {
   }
 
   updateGraph() {
-    setTimeout(() => {
-      this.profiledata.stepGraphUpdateOptions = {
-        series: [{
-          data: this.profiledata.userStepsData
-        }]
-      };
-      this.displayStepsTitle();
-    }, 1000);
+    this.profiledata.stepGraphUpdateOptions = {
+      series: [{
+        data: this.profiledata.userStepsData
+      }]
+    };
+    this.displayStepsTitle();
   }
 
   displayStepsTitle() {

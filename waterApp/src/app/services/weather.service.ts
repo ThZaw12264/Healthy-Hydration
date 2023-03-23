@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ProfileData } from '../pages/profile/profile.data';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +10,45 @@ export class WeatherService {
   private apiKey: string = 'aaf16230ad3cc3d8f5af5e4fa7f9f4c6'; //openweatherapi key
   private apiUrl: string = 'https://api.openweathermap.org/data/2.5/weather?lat=';
   private geoUrl: string = 'http://api.openweathermap.org/geo/1.0/zip?zip=';
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient, private profiledata: ProfileData) { }
 
   private lat: number = 0;
   private long: number = 0;
   private city: string = "";
 
+  private kelvinTemp!: number;
+  private humidity!: number;
+  private temperature!: number;
+
+  async getWeatherData() {
+    let p = new Promise((resolve, reject) => {
+      this.getWeatherByZipCode(this.profiledata.userZIPCode).then((weatherData$) => {
+        weatherData$.subscribe((weatherData) => {
+          console.log('Weather data:', weatherData);
+          this.kelvinTemp = weatherData.main.temp;
+          this.humidity = weatherData.main.humidity;
+          this.temperature = (this.kelvinTemp - 273.15) * 9/5 + 32;
+          return resolve({
+            temperature: this.temperature, 
+            humidity: this.humidity
+          });
+        }, (error) => {
+          console.error('Error fetching weather data:', error);
+        });
+      }, error => {
+        console.error('Error getting latitude and longitude:', error);
+      });
+    });
+
+    p.then((response) => {
+      return response;
+    }).catch((error) => {
+      return error;
+    });
+
+    return p;
+  }
 
   async getLatAndLonFromZipCode(zipCode: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -43,10 +77,10 @@ export class WeatherService {
     }
   }
 
-  async getWeatherByZipCode(zipCode: string, countryCode: string = 'us'): Promise<Observable<any>> {
+  async getWeatherByZipCode(zipCode: number, countryCode: string = 'us'): Promise<Observable<any>> {
     console.log("went in");
     try {
-      await this.getLatAndLonFromZipCode(zipCode);
+      await this.getLatAndLonFromZipCode(zipCode.toString());
         
       return this.http.get(`${this.apiUrl}${this.lat}&lon=${this.long}&appid=${this.apiKey}`);
     } catch (error) {

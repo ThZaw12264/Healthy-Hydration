@@ -28,19 +28,22 @@
       <ion-title>Hi {{profiledata.userName}}</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="ion-padding">
+  <ion-content>
     
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Your recommended amount for today: {{profiledata.waterAmount}} mL</ion-card-title>
+        <ion-card-subtitle><h3>Today's recommended amount of water:</h3></ion-card-subtitle>
+        <ion-card-title>{{profiledata.waterAmount}} mL</ion-card-title>
       </ion-card-header>
     </ion-card>
 
-      <ion-label>How hydrated did you feel from drinking the recommended amount?</ion-label>
-      <ion-range [ticks]="true" [snaps]="true" min="0" max="10" step="1" [(ngModel)]="profiledata.hydrationScore">
-        <ion-label slot="start"><small>TOO LITTLE</small></ion-label>
-        <ion-label slot="end"><small>TOO MUCH</small></ion-label>
-      </ion-range>
+    <h3 class="ion-padding" style="text-align:center">When waking up on a new day, enter the information below...</h3>
+
+    <h5 class="ion-padding" style="text-align:center">How hydrated did you feel from drinking the amount we recommended?</h5>
+    <ion-range [ticks]="true" [snaps]="true" min="0" max="10" step="1" [(ngModel)]="profiledata.hydrationScore">
+      <ion-label slot="start"><small>TOO LITTLE</small></ion-label>
+      <ion-label slot="end"><small>TOO MUCH</small></ion-label>
+    </ion-range>
     <ion-item>
       <ion-label>Your hydration level: {{profiledata.hydrationScore}}</ion-label>
     </ion-item>
@@ -48,11 +51,11 @@
     &nbsp;
     <ion-item>
       <ion-label>Body Water Content:</ion-label>
-      <ion-input type="number" placeholder="...%"></ion-input>
+      <ion-input type="number" [(ngModel)]="profiledata.bodyWaterContent" placeholder="...%"></ion-input>
     </ion-item>
 
     &nbsp;
-    <ion-button expand="block" (click)="recommendWater()">Get Today's Water Amount</ion-button>
+    <ion-button class="ion-padding-horizontal" expand="block" (click)="recommendWater()">Get Today's Water Amount</ion-button>
 
   </ion-content>
 
